@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CalcPro™ - 专业计算服务平台</title>
+  <meta name="description" content="全球领先的计算结果查询平台，精准、快速、专业。扫码即可获取您的计算结果。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-page: #0f0f0f;
+      --bg-calc: #1c1c1e;
+      --bg-display: #1c1c1e;
+      --btn-number: #333335;
+      --btn-number-hover: #48484a;
+      --btn-op: #ff9f0a;
+      --btn-op-hover: #ffb340;
+      --btn-func: #636366;
+      --btn-func-hover: #7c7c80;
+      --btn-equal: #ff9f0a;
+      --text-primary: #ffffff;
+      --text-dim: rgba(255,255,255,0.6);
+      --text-result: #ff9f0a;
+      --accent: #ff9f0a;
+      --border-radius-calc: 40px;
+      --border-radius-btn: 50%;
+      --shadow-calc: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+      --ticker-bg: #111;
+      --ticker-text: rgba(255,255,255,0.45);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px 0 0 0;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+      user-select: none;
+    }
+    .header .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .header .tagline {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Calculator Shell ── */
+    .calc-wrapper {
+      position: relative;
+      width: min(390px, 100vw);
+      flex-shrink: 0;
+    }
+
+    .calculator {
+      background: var(--bg-calc);
+      border-radius: var(--border-radius-calc);
+      box-shadow: var(--shadow-calc);
+      overflow: hidden;
+      width: 100%;
+      padding: 20px 16px 30px 16px;
+      position: relative;
+    }
+
+    /* ── Display Area ── */
+    .display {
+      padding: 16px 24px 20px 24px;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .expression {
+      font-size: 17px;
+      color: var(--text-dim);
+      font-weight: 300;
+      min-height: 24px;
+      word-break: break-all;
+      text-align: right;
+      line-height: 1.4;
+      max-height: 50px;
+      overflow: hidden;
+    }
+
+    .result-display {
+      font-size: clamp(42px, 10vw, 62px);
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1.1;
+      word-break: break-all;
+      text-align: right;
+      transition: color 0.2s;
+      letter-spacing: -2px;
+    }
+
+    /* ── Button Grid ── */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 0 8px;
+    }
+
+    .btn {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: var(--border-radius-btn);
+      font-family: var(--font);
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s ease, filter 0.08s ease, background 0.1s;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+      -webkit-user-select: none;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .btn:active::after { opacity: 0.15; }
+    .btn:active { transform: scale(0.92); }
+
+    .btn-num {
+      background: var(--btn-number);
+      color: var(--text-primary);
+    }
+    .btn-num:hover { background: var(--btn-number-hover); }
+
+    .btn-func {
+      background: var(--btn-func);
+      color: var(--text-primary);
+      font-size: clamp(14px, 4vw, 18px);
+    }
+    .btn-func:hover { background: var(--btn-func-hover); }
+
+    .btn-op {
+      background: var(--btn-op);
+      color: #fff;
+      font-size: clamp(20px, 6vw, 28px);
+    }
+    .btn-op:hover { background: var(--btn-op-hover); }
+
+    .btn-zero {
+      aspect-ratio: auto;
+      border-radius: 40px;
+      grid-column: span 2;
+      justify-content: flex-start;
+      padding-left: 30px;
+      letter-spacing: 0;
+    }
+
+    .btn-equal {
+      background: var(--btn-equal);
+      color: #fff;
+    }
+
+    /* active operator highlight */
+    .btn-op.active-op {
+      background: #fff;
+      color: var(--btn-op);
+    }
+
+    /* ── Payment Overlay ── */
+    .payment-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .payment-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .payment-card {
+      background: #1e1e20;
+      border-radius: 28px;
+      padding: 28px 24px 24px;
+      width: min(340px, 90vw);
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+      transform: translateY(30px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .payment-overlay.show .payment-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .payment-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,159,10,0.15);
+      border: 1px solid rgba(255,159,10,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .payment-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .payment-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .qr-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      display: inline-block;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .qr-container img {
+      width: 180px;
+      height: 180px;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .qr-corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-color: var(--accent);
+      border-style: solid;
+    }
+    .qr-corner.tl { top: 8px; left: 8px; border-width: 3px 0 0 3px; border-radius: 3px 0 0 3px; }
+    .qr-corner.tr { top: 8px; right: 8px; border-width: 3px 3px 0 0; border-radius: 0 3px 3px 0; }
+    .qr-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; border-radius: 0 0 0 3px; }
+    .qr-corner.br { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; border-radius: 0 3px 3px 0; }
+
+    .scan-hint {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 6px;
+    }
+
+    .price-hint {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .price-hint strong {
+      color: var(--accent);
+    }
+
+    .payment-expression {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      font-family: monospace;
+      word-break: break-all;
+    }
+
+    .payment-close {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font);
+      width: 100%;
+    }
+    .payment-close:hover {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .disclaimer {
+      font-size: 9px;
+      color: rgba(255,255,255,0.18);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── Social Proof Ticker ── */
+    .ticker-bar {
+      width: 100%;
+      max-width: min(390px, 100vw);
+      margin-top: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      overflow: hidden;
+      height: 72px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .ticker-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 5px 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 2;
+    }
+
+    .ticker-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #30d158;
+      animation: pulse-dot 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .ticker-label {
+      font-size: 9px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .ticker-scroll-container {
+      position: absolute;
+      top: 18px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+    }
+
+    .ticker-scroll {
+      display: flex;
+      flex-direction: column;
+      animation: scroll-up 18s linear infinite;
+    }
+
+    @keyframes scroll-up {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    .ticker-item {
+      padding: 3px 14px;
+      font-size: 10.5px;
+      color: var(--ticker-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.6;
+    }
+
+    .ticker-item .name { color: rgba(255,255,255,0.55); }
+    .ticker-item .expr { color: rgba(255,159,10,0.6); font-family: monospace; }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.15);
+      text-align: center;
+      letter-spacing: 0.3px;
+      user-select: none;
+    }
+
+    /* ── Desktop layout ── */
+    @media (min-width: 600px) {
+      body {
+        justify-content: center;
+        padding: 40px 0 40px 0;
+      }
+
+      .calculator {
+        border-radius: 50px;
+      }
+
+      .btn-grid {
+        gap: 14px;
+      }
+    }
+
+    /* ── Very small screens ── */
+    @media (max-width: 380px) {
+      .calculator {
+        border-radius: 30px;
+        padding: 14px 10px 22px 10px;
+      }
+
+      .btn-grid {
+        gap: 9px;
+        padding: 0 4px;
+      }
+
+      .display {
+        padding: 10px 16px 14px 16px;
+        min-height: 100px;
+      }
+    }
+
+    /* ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transform: scale(0);
+      animation: ripple-anim 0.4s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(2.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="brand">✦ CalcPro™</div>
+    <div class="tagline">专业计算结果查询服务 · 全球首创</div>
+  </div>
+
+  <!-- Calculator -->
+  <div class="calc-wrapper">
+    <div class="calculator">
+      <!-- Display -->
+      <div class="display">
+        <div class="expression" id="expression"></div>
+        <div class="result-display" id="result-display">0</div>
+      </div>
+
+      <!-- Button Grid -->
+      <div class="btn-grid">
+        <!-- Row 1: func buttons -->
+        <button class="btn btn-func" data-action="clear" id="btn-clear">AC</button>
+        <button class="btn btn-func" data-action="sign" id="btn-sign">+/−</button>
+        <button class="btn btn-func" data-action="percent" id="btn-percent">%</button>
+        <button class="btn btn-op" data-action="op" data-op="÷" id="btn-div">÷</button>
+
+        <!-- Row 2 -->
+        <button class="btn btn-num" data-action="digit" data-digit="7" id="btn-7">7</button>
+        <button class="btn btn-num" data-action="digit" data-digit="8" id="btn-8">8</button>
+        <button class="btn btn-num" data-action="digit" data-digit="9" id="btn-9">9</button>
+        <button class="btn btn-op" data-action="op" data-op="×" id="btn-mul">×</button>
+
+        <!-- Row 3 -->
+        <button class="btn btn-num" data-action="digit" data-digit="4" id="btn-4">4</button>
+        <button class="btn btn-num" data-action="digit" data-digit="5" id="btn-5">5</button>
+        <button class="btn btn-num" data-action="digit" data-digit="6" id="btn-6">6</button>
+        <button class="btn btn-op" data-action="op" data-op="−" id="btn-sub">−</button>
+
+        <!-- Row 4 -->
+        <button class="btn btn-num" data-action="digit" data-digit="1" id="btn-1">1</button>
+        <button class="btn btn-num" data-action="digit" data-digit="2" id="btn-2">2</button>
+        <button class="btn btn-num" data-action="digit" data-digit="3" id="btn-3">3</button>
+        <button class="btn btn-op" data-action="op" data-op="+" id="btn-add">+</button>
+
+        <!-- Row 5 -->
+        <button class="btn btn-num btn-zero" data-action="digit" data-digit="0" id="btn-0">0</button>
+        <button class="btn btn-num" data-action="dot" id="btn-dot">.</button>
+        <button class="btn btn-op btn-equal" data-action="equal" id="btn-equal">=</button>
+      </div>
+    </div>
+
+    <!-- Ticker -->
+    <div class="ticker-bar">
+      <div class="ticker-header">
+        <div class="ticker-dot"></div>
+        <div class="ticker-label">实时用户记录</div>
+      </div>
+      <div class="ticker-scroll-container">
+        <div class="ticker-scroll" id="ticker-scroll">
+          <!-- dynamically filled -->
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© 2026 CalcPro™ · 粤ICP备XXXXXXXX号 · 计算结果受专利保护</div>
+  </div>
+
+  <!-- Payment Overlay -->
+  <div class="payment-overlay" id="payment-overlay">
+    <div class="payment-card">
+      <div class="payment-badge">🔒 结果加密中</div>
+      <div class="payment-title">您的计算结果已就绪</div>
+      <div class="payment-subtitle">扫描下方二维码，即可安全获取您的<br/>专属计算结果（仅需 ¥0.1 元）</div>
+
+      <div class="payment-expression" id="payment-expression"></div>
+
+      <div class="qr-container">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <img src="qr.png" alt="付款二维码" id="qr-img" />
+      </div>
+
+      <div class="scan-hint">📱 扫码查看结果</div>
+      <div class="price-hint">
+        支持微信 / 支付宝 · 到账后自动显示<br/>
+        首次用户享 <strong>0折优惠</strong>（原价 ¥0.1）
+      </div>
+
+      <button class="payment-close" id="payment-close">
+        暂不查看，放弃本次计算结果
+      </button>
+      <div class="disclaimer">
+        * 本平台采用 256-bit 军用级加密保护您的计算数据。结果仅保留 24 小时，请及时查看。<br/>
+        CalcPro™ 不对因未付款导致的计算结果永久丢失承担责任。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ──────────────────────────────────────────────
+    // Calculator Logic
+    // ──────────────────────────────────────────────
+    let currentVal = '0';
+    let prevVal = '';
+    let operator = null;
+    let waitingForOperand = false;
+    let expressionStr = '';
+    let justCalculated = false;
+    let activeOpBtn = null;
+
+    const resultDisplay = document.getElementById('result-display');
+    const expressionEl = document.getElementById('expression');
+
+    function updateDisplay(val) {
+      let display = val;
+      if (display.length > 12) {
+        const num = parseFloat(display);
+        if (!isNaN(num)) {
+          display = num.toPrecision(8).replace(/\.?0+$/, '');
+          if (display.length > 12) display = num.toExponential(4);
+        }
+      }
+      resultDisplay.textContent = display;
+    }
+
+    function clearActiveOp() {
+      if (activeOpBtn) {
+        activeOpBtn.classList.remove('active-op');
+        activeOpBtn = null;
+      }
+    }
+
+    function setActiveOp(btn) {
+      clearActiveOp();
+      if (btn) {
+        btn.classList.add('active-op');
+        activeOpBtn = btn;
+      }
+    }
+
+    function handleDigit(digit) {
+      if (justCalculated) {
+        currentVal = digit;
+        expressionStr = '';
+        justCalculated = false;
+        clearActiveOp();
+      } else if (waitingForOperand) {
+        currentVal = digit;
+        waitingForOperand = false;
+      } else {
+        currentVal = currentVal === '0' ? digit : currentVal + digit;
+        if (currentVal.length > 15) return;
+      }
+      updateDisplay(currentVal);
+    }
+
+    function handleDot() {
+      if (justCalculated) {
+        currentVal = '0.';
+        justCalculated = false;
+        clearActiveOp();
+      } else if (waitingForOperand) {
+        currentVal = '0.';
+        waitingForOperand = false;
+      } else if (!currentVal.includes('.')) {
+        currentVal += '.';
+      }
+      updateDisplay(currentVal);
+    }
+
+    function handleOp(op, btn) {
+      if (operator && !waitingForOperand) {
+        const result = calculate(parseFloat(prevVal), parseFloat(currentVal), operator);
+        currentVal = String(result);
+        prevVal = String(result);
+        expressionStr = String(result) + ' ' + op;
+      } else {
+        prevVal = currentVal;
+        expressionStr = currentVal + ' ' + op;
+      }
+      operator = op;
+      waitingForOperand = true;
+      justCalculated = false;
+      updateDisplay(currentVal);
+      expressionEl.textContent = expressionStr;
+      setActiveOp(btn);
+    }
+
+    function calculate(a, b, op) {
+      switch (op) {
+        case '+': return a + b;
+        case '−': return a - b;
+        case '×': return a * b;
+        case '÷': return b !== 0 ? a / b : 'Error';
+        default: return b;
+      }
+    }
+
+    function handleEqual() {
+      if (!operator) return;
+      const a = parseFloat(prevVal);
+      const b = parseFloat(currentVal);
+      const fullExpr = `${prevVal} ${operator} ${currentVal}`;
+      const result = calculate(a, b, operator);
+      const resultStr = String(parseFloat(result.toFixed(10)));
+
+      expressionStr = fullExpr + ' =';
+      expressionEl.textContent = expressionStr;
+
+      // Don't show result — show payment gate instead
+      showPayment(fullExpr, resultStr);
+
+      justCalculated = true;
+      waitingForOperand = false;
+      operator = null;
+      clearActiveOp();
+
+      // add to ticker
+      addTickerEntry(fullExpr);
+    }
+
+    function handleClear() {
+      currentVal = '0';
+      prevVal = '';
+      operator = null;
+      waitingForOperand = false;
+      expressionStr = '';
+      justCalculated = false;
+      expressionEl.textContent = '';
+      updateDisplay('0');
+      clearActiveOp();
+      document.getElementById('btn-clear').textContent = 'AC';
+    }
+
+    function handleSign() {
+      if (currentVal === '0' || currentVal === 'Error') return;
+      currentVal = currentVal.startsWith('-') ? currentVal.slice(1) : '-' + currentVal;
+      updateDisplay(currentVal);
+    }
+
+    function handlePercent() {
+      const val = parseFloat(currentVal);
+      if (isNaN(val)) return;
+      currentVal = String(val / 100);
+      updateDisplay(currentVal);
+    }
+
+    // button click handlers
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        createRipple(btn, e);
+        const action = btn.dataset.action;
+        if (action === 'digit') {
+          handleDigit(btn.dataset.digit);
+          if (currentVal !== '0') document.getElementById('btn-clear').textContent = 'C';
+        } else if (action === 'dot') {
+          handleDot();
+        } else if (action === 'op') {
+          handleOp(btn.dataset.op, btn);
+        } else if (action === 'equal') {
+          handleEqual();
+        } else if (action === 'clear') {
+          handleClear();
+        } else if (action === 'sign') {
+          handleSign();
+        } else if (action === 'percent') {
+          handlePercent();
+        }
+      });
+    });
+
+    // keyboard support
+    document.addEventListener('keydown', e => {
+      if (e.key >= '0' && e.key <= '9') handleDigit(e.key);
+      else if (e.key === '.') handleDot();
+      else if (e.key === '+') handleOp('+', null);
+      else if (e.key === '-') handleOp('−', null);
+      else if (e.key === '*') handleOp('×', null);
+      else if (e.key === '/') { e.preventDefault(); handleOp('÷', null); }
+      else if (e.key === 'Enter' || e.key === '=') handleEqual();
+      else if (e.key === 'Backspace') {
+        if (currentVal.length > 1) currentVal = currentVal.slice(0, -1);
+        else currentVal = '0';
+        updateDisplay(currentVal);
+      }
+      else if (e.key === 'Escape') handleClear();
+    });
+
+    // ──────────────────────────────────────────────
+    // Ripple
+    // ──────────────────────────────────────────────
+    function createRipple(btn, e) {
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      const size = Math.max(btn.clientWidth, btn.clientHeight);
+      const rect = btn.getBoundingClientRect();
+      const x = (e.clientX || rect.left + rect.width/2) - rect.left - size/2;
+      const y = (e.clientY || rect.top + rect.height/2) - rect.top - size/2;
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    // ──────────────────────────────────────────────
+    // Payment Overlay
+    // ──────────────────────────────────────────────
+    const overlay = document.getElementById('payment-overlay');
+    const paymentExprEl = document.getElementById('payment-expression');
+
+    function showPayment(expr, result) {
+      paymentExprEl.textContent = `🔐 ${expr} = ████`;
+      overlay.classList.add('show');
+    }
+
+    document.getElementById('payment-close').addEventListener('click', () => {
+      overlay.classList.remove('show');
+      // after close, let user see the result with a "you missed out" display
+      updateDisplay('¿？？?');
+      setTimeout(() => updateDisplay(currentVal || '0'), 1800);
+    });
+
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) overlay.classList.remove('show');
+    });
+
+    // ──────────────────────────────────────────────
+    // Ticker / Social Proof
+    // ──────────────────────────────────────────────
+    const firstNames = ['张','李','王','赵','陈','刘','杨','黄','周','吴','郑','孙','徐','朱','马','胡','林','郭','何','高'];
+    const lastNames  = ['伟','芳','娜','秀英','敏','静','丽','强','磊','洋','艳','勇','军','杰','娟','涛','明','超','霞','平'];
+
+    function fakeName() {
+      const f = firstNames[Math.floor(Math.random() * firstNames.length)];
+      const l = lastNames[Math.floor(Math.random() * lastNames.length)];
+      // mask middle if 2+ chars
+      const full = f + l;
+      if (full.length >= 3) return full[0] + '*'.repeat(full.length - 2) + full[full.length - 1];
+      return full[0] + '*';
+    }
+
+    function fakeMinutes() {
+      const t = Math.floor(Math.random() * 58) + 1;
+      return t < 60 ? `${t}分钟前` : `${Math.floor(t/60)}小时前`;
+    }
+
+    function fakeExpr() {
+      const ops = ['+', '-', '×', '÷'];
+      const a = Math.floor(Math.random() * 9999) + 1;
+      const b = Math.floor(Math.random() * 9999) + 1;
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      return `${a} ${op} ${b}`;
+    }
+
+    const tickerData = [];
+    for (let i = 0; i < 20; i++) {
+      tickerData.push({ name: fakeName(), expr: fakeExpr(), time: fakeMinutes() });
+    }
+
+    function addTickerEntry(expr) {
+      tickerData.unshift({ name: '您', expr, time: '刚刚' });
+    }
+
+    function renderTicker() {
+      const scroll = document.getElementById('ticker-scroll');
+      const items = [...tickerData, ...tickerData]; // duplicate for infinite loop
+      scroll.innerHTML = items.map(d =>
+        `<div class="ticker-item">
+          <span class="name">${d.name}</span> 在 ${d.time} 查询了
+          <span class="expr">${d.expr}</span> 的结果
+        </div>`
+      ).join('');
+    }
+
+    renderTicker();
+
+    // periodically refresh fake data
+    setInterval(() => {
+      tickerData.push({ name: fakeName(), expr: fakeExpr(), time: fakeMinutes() });
+      if (tickerData.length > 30) tickerData.shift();
+      renderTicker();
+    }, 5000);
+  </script>
+</body>
+</html>
