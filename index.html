@@ -131,7 +131,7 @@
     }
     .ticker-track { display: flex; flex-direction: column; animation: scrollup 50s linear infinite; }
     @keyframes scrollup { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
-    .ti { padding: 1.5px 14px; font-size: 11px; color: rgba(255,255,255,.38); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.75; }
+    .ti { padding: 2px 14px; font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.65; word-break: break-word; }
     .ti .tn  { color: rgba(255,255,255,.65); }
     .ti .te  { color: rgba(255,159,10,.65); font-family: monospace; }
     .ti .tl2 { color: rgba(100,210,255,.6); }
@@ -828,13 +828,14 @@
   function rnet()      { return ['4G','5G','WiFi'][~~(Math.random()*3)]; }
 
   var FAKE_T = [
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+isp+' '+net+' '+t+'用 '+dv+' 查询了 <span class="te">'+e+'</span>'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>的<span class="tn">'+n+'</span> 算了 <span class="te">'+e+'</span>，看到¥1.99后，沉默了'; },
-    function(n,e,t,pv,isp,dv,net){ return dv+' · '+isp+' '+net+' · <span class="tl2">'+pv+'</span> '+t+'：计算 <span class="te">'+e+'</span>，拒绝付款，结果永久失踪'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>（<span class="tl2">'+pv+'</span> · '+isp+'）'+t+'试图免费查看 <span class="te">'+e+'</span>，被识破'; },
-    function(n,e,t,pv,isp,dv,net){ return '来自<span class="tl2">'+pv+'</span>的 '+dv+' 用户 '+t+' 声称已付款查询 <span class="te">'+e+'</span>，系统表示存疑'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> 在 '+pv+' 用 '+dv+'（'+isp+' '+net+'）'+t+' 算了 <span class="te">'+e+'</span>，付款弹窗弹出后立即关闭'; },
-    function(n,e,t,pv,isp,dv,net){ return dv+' · <span class="tl2">'+pv+'</span> '+t+'：<span class="te">'+e+'</span> = ████  付款通道打开了0.3秒'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>·<span class="tl2">'+pv+'</span>·'+net+' '+t+'查 <span class="te">'+e+'</span>'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> <span class="tn">'+n+'</span> 算完关掉了弹窗'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>·'+isp+' 算 <span class="te">'+e+'</span> 拒绝付款'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>·<span class="tl2">'+pv+'</span> 试图免费看结果，失败'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> '+dv+' 声称已付款 🤨'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> 查 <span class="te">'+e+'</span>，弹窗0.3秒后关闭'; },
+    function(n,e,t,pv,isp,dv,net){ return dv+'·<span class="tl2">'+pv+'</span> 算了结果不给看'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>·'+isp+' '+t+' 查 <span class="te">'+e+'</span>'; },
   ];
 
   var tickerData = [];
