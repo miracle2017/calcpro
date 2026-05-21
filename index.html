@@ -161,12 +161,15 @@
     .comment-list::-webkit-scrollbar { width: 3px; }
     .comment-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
     .c-card  { background: rgba(255,255,255,.04); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.06); }
-    .c-head  { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-    .c-avatar { font-size: 18px; line-height: 1; }
-    .c-meta  { flex: 1; }
-    .c-author { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.7); }
-    .c-time  { font-size: 9.5px; color: rgba(255,255,255,.25); margin-left: auto; }
-    .c-text  { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.55; margin-bottom: 8px; }
+    .c-head  { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 8px; }
+    .c-avatar { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+    .c-meta  { flex: 1; min-width: 0; }
+    .c-name-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .c-author { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.78); }
+    .c-time  { font-size: 9.5px; color: rgba(255,255,255,.22); flex-shrink: 0; }
+    .c-location { font-size: 10px; color: rgba(255,255,255,.3); margin-top: 2px; letter-spacing: .2px; }
+    .c-location .loc-pv { color: rgba(100,210,255,.55); font-weight: 500; }
+    .c-text  { font-size: 13px; color: rgba(255,255,255,.82); line-height: 1.55; margin-bottom: 8px; }
     .c-actions { display: flex; align-items: center; gap: 12px; }
     .c-like, .c-reply-btn {
       display: flex; align-items: center; gap: 4px; font-size: 11px;
@@ -700,18 +703,18 @@
   // ═══════════════════════════════════════
   var COM_AVATARS = ['🎭','🐼','🦊','🐸','🦉','🎪','🐯','🦋','🎨','🌊','🎸','🚀','🌈','🍉','🦄'];
   var SEED = [
-    {id:'s1',text:'算了1+1，支付弹窗秒弹，这效率比我老板还高',author:'🎭',device:'某iPhone用户',time:Date.now()-7200000,likes:31,replies:[
-      {id:'s1r1',text:'投诉部门正在打盹，请稍后再试',author:'🎪',device:'客服机器人™',time:Date.now()-6800000,likes:58},
-      {id:'s1r2',text:'哈哈哈哈哈哈',author:'🐸',device:'某Android用户',time:Date.now()-3600000,likes:12}
+    {id:'s1',text:'算了1+1，支付弹窗秒弹，这效率比我老板还高',author:'🎭',name:'张*',province:'广东',device:'iPhone 15 Pro',time:Date.now()-7200000,likes:31,replies:[
+      {id:'s1r1',text:'投诉部门正在打盹，请稍后再试',author:'🎪',name:'客服机器人',province:'',device:'服务器',time:Date.now()-6800000,likes:58},
+      {id:'s1r2',text:'哈哈哈哈哈哈',author:'🐸',name:'李*',province:'上海',device:'小米14',time:Date.now()-3600000,likes:12}
     ]},
-    {id:'s2',text:'我已经连续三天来这里计算，坚决不付款，这是原则问题',author:'🦊',device:'MacBook用户',time:Date.now()-5000000,likes:77,replies:[
-      {id:'s2r1',text:'你是本月最坚强的用户，系统已为你立传',author:'🦉',device:'某神秘设备',time:Date.now()-4500000,likes:44}
+    {id:'s2',text:'我已经连续三天来这里计算，坚决不付款，这是原则问题',author:'🦊',name:'王**',province:'北京',device:'MacBook Pro',time:Date.now()-5000000,likes:77,replies:[
+      {id:'s2r1',text:'你是本月最坚强的用户，系统已为你立传',author:'🦉',name:'匿名',province:'浙江',device:'iPhone 14',time:Date.now()-4500000,likes:44}
     ]},
-    {id:'s3',text:'发给男朋友看，他以为是真的，付款了，哈哈哈哈',author:'🌈',device:'iPhone用户',time:Date.now()-2400000,likes:104,replies:[]},
-    {id:'s4',text:'我要在这里表白：如果你在用计算器算什么，结果是你爱我就好了',author:'🌊',device:'某Android用户',time:Date.now()-1200000,likes:88,replies:[
-      {id:'s4r1',text:'这是我见过最浪漫的地方，没有之一',author:'🎨',device:'Chrome用户',time:Date.now()-900000,likes:62}
+    {id:'s3',text:'发给男朋友看，他以为是真的，付款了，哈哈哈哈',author:'🌈',name:'陈*',province:'四川',device:'iPhone 13',time:Date.now()-2400000,likes:104,replies:[]},
+    {id:'s4',text:'我要在这里表白：如果你在用计算器算什么，结果是你爱我就好了',author:'🌊',name:'匿名',province:'湖南',device:'华为Mate60',time:Date.now()-1200000,likes:88,replies:[
+      {id:'s4r1',text:'这是我见过最浪漫的地方，没有之一',author:'🎨',name:'刘*',province:'江苏',device:'vivo X100',time:Date.now()-900000,likes:62}
     ]},
-    {id:'s5',text:'¥1.99我觉得挺值的，算一个1024÷0，系统告诉我Error，很准确',author:'🚀',device:'Windows电脑',time:Date.now()-600000,likes:39,replies:[]},
+    {id:'s5',text:'¥1.99我觉得挺值的，算一个1024÷0，系统告诉我Error，很准确',author:'🚀',name:'匿名',province:'山东',device:'Windows电脑',time:Date.now()-600000,likes:39,replies:[]},
   ];
 
   function loadComments() {
@@ -742,11 +745,17 @@
         + '<textarea class="reply-input" id="rit-'+c.id+'" placeholder="回复…" rows="1"></textarea>'
         + '<button class="reply-send" onclick="submitReply(\''+c.id+'\')">发送</button>'
         + '</div>' : '';
+    var displayName = c.name || c.device || '匿名';
+    var pvHtml = c.province ? '<span class="loc-pv">'+c.province+'</span> · ' : '';
+    var locLine = (c.province || c.device)
+      ? '<div class="c-location">'+pvHtml+(c.device||'')+'</div>' : '';
     return '<div class="'+cls+'" id="c-'+c.id+'">'
       + '<div class="c-head">'
       + '<div class="c-avatar">'+c.author+'</div>'
-      + '<div class="c-meta"><div class="c-author">'+(c.device||'匿名')+'</div></div>'
-      + '<div class="c-time">'+timeAgo(c.time)+'</div>'
+      + '<div class="c-meta">'
+      + '<div class="c-name-row"><span class="c-author">'+displayName+'</span><span class="c-time">'+timeAgo(c.time)+'</span></div>'
+      + locLine
+      + '</div>'
       + '</div>'
       + '<div class="c-text">'+c.text+'</div>'
       + '<div class="c-actions">'
@@ -783,7 +792,9 @@
     if(!text)return;
     var data=loadComments();
     data.unshift({id:'u'+Date.now(), text:text, author:getMyAvatar(),
-      device:localStorage.getItem('my_nickname')||UserInfo.device,
+      name: localStorage.getItem('my_nickname')||'匿名',
+      province: UserInfo.province||'',
+      device: UserInfo.device,
       time:Date.now(), likes:0, replies:[]});
     saveComments(data); inp.value=''; inp.style.height='auto';
     renderComments(); document.getElementById('comment-list').scrollTop=0;
@@ -794,7 +805,9 @@
     var data=loadComments(), parent=data.find(function(c){return c.id===parentId;});
     if(!parent)return;
     parent.replies.push({id:'r'+Date.now(), text:text, author:getMyAvatar(),
-      device:localStorage.getItem('my_nickname')||UserInfo.device,
+      name: localStorage.getItem('my_nickname')||'匿名',
+      province: UserInfo.province||'',
+      device: UserInfo.device,
       time:Date.now(), likes:0});
     saveComments(data); inp.value=''; renderComments();
   }
