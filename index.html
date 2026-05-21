@@ -3,878 +3,914 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>CalcPro™ - 专业计算服务平台</title>
-  <meta name="description" content="全球领先的计算结果查询平台，精准、快速、专业。扫码即可获取您的计算结果。" />
+  <title>计算云™ - 专业计算结果查询平台</title>
+  <meta name="description" content="全球领先的专业计算结果查询平台，已帮助数千名用户获取精准计算结果。" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     :root {
-      --bg-page: #0f0f0f;
-      --bg-calc: #1c1c1e;
-      --bg-display: #1c1c1e;
-      --btn-number: #333335;
-      --btn-number-hover: #48484a;
-      --btn-op: #ff9f0a;
-      --btn-op-hover: #ffb340;
-      --btn-func: #636366;
-      --btn-func-hover: #7c7c80;
-      --btn-equal: #ff9f0a;
-      --text-primary: #ffffff;
-      --text-dim: rgba(255,255,255,0.6);
-      --text-result: #ff9f0a;
-      --accent: #ff9f0a;
-      --border-radius-calc: 40px;
-      --border-radius-btn: 50%;
-      --shadow-calc: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
-      --ticker-bg: #111;
-      --ticker-text: rgba(255,255,255,0.45);
+      --bg: #0a0a0c; --bg-calc: #1c1c1e;
+      --btn-num: #2e2e30; --btn-nhov: #3a3a3c;
+      --btn-fn: #565658;  --btn-fnhov: #68686a;
+      --btn-op: #ff9f0a;  --btn-ophov: #ffb340;
+      --accent: #ff9f0a; --white: #fff; --dim: rgba(255,255,255,.5);
       --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Noto Serif SC', Georgia, serif;
+      --ticker-h: 100px;
     }
-
-    html, body {
-      height: 100%;
-      font-family: var(--font);
-      background: var(--bg-page);
-      color: var(--text-primary);
-      overflow-x: hidden;
-    }
-
+    html { height: 100%; }
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20px 0 0 0;
+      font-family: var(--font); background: var(--bg); color: var(--white);
+      min-height: 100%; display: flex; flex-direction: column; align-items: center;
+      padding: 18px 0 calc(var(--ticker-h) + 10px) 0; overflow-x: hidden;
     }
 
     /* ── Header ── */
-    .header {
-      text-align: center;
-      margin-bottom: 18px;
-      user-select: none;
-    }
-    .header .brand {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-    .header .tagline {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      margin-top: 2px;
-      letter-spacing: 0.5px;
-    }
-
-    /* ── Calculator Shell ── */
-    .calc-wrapper {
-      position: relative;
-      width: min(390px, 100vw);
-      flex-shrink: 0;
-    }
-
-    .calculator {
-      background: var(--bg-calc);
-      border-radius: var(--border-radius-calc);
-      box-shadow: var(--shadow-calc);
-      overflow: hidden;
-      width: 100%;
-      padding: 20px 16px 30px 16px;
+    .header { width: min(390px,100vw); padding: 0 20px 14px; user-select: none; }
+    .brand-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .brand-name { font-family: var(--serif); font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .brand-tm { font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+    .brand-line { height: 1px; background: linear-gradient(90deg,rgba(255,159,10,.6),rgba(255,159,10,.1),transparent); margin: 8px 0; }
+    .stats-bar { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+    .stats-dot { width: 5px; height: 5px; border-radius: 50%; background: #30d158; flex-shrink: 0; animation: blink 2s infinite; }
+    .stats-label { font-size: 11px; color: var(--dim); white-space: nowrap; }
+    .stats-counter-wrap { display: flex; align-items: center; gap: 6px; flex: 1; }
+    .stats-num { display: inline-flex; align-items: center; gap: 3px; }
+    .digit-slot {
+      width: 26px; height: 38px; overflow: hidden; border-radius: 7px;
+      background: rgba(255,159,10,.1); border: 1px solid rgba(255,159,10,.28);
+      box-shadow: 0 0 10px rgba(255,159,10,.12), inset 0 1px 0 rgba(255,255,255,.05);
       position: relative;
     }
-
-    /* ── Display Area ── */
-    .display {
-      padding: 16px 24px 20px 24px;
-      min-height: 130px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: flex-end;
-      gap: 4px;
+    .digit-slot::before, .digit-slot::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 8px; z-index: 2; pointer-events: none;
     }
-
-    .expression {
-      font-size: 17px;
-      color: var(--text-dim);
-      font-weight: 300;
-      min-height: 24px;
-      word-break: break-all;
-      text-align: right;
-      line-height: 1.4;
-      max-height: 50px;
-      overflow: hidden;
+    .digit-slot::before { top: 0;    background: linear-gradient(to bottom, rgba(10,10,12,.9), transparent); }
+    .digit-slot::after  { bottom: 0; background: linear-gradient(to top,   rgba(10,10,12,.9), transparent); }
+    .digit-reel { display: flex; flex-direction: column; align-items: center; will-change: transform; }
+    .digit-reel span {
+      height: 38px; line-height: 38px; font-size: 24px; font-weight: 800;
+      color: var(--accent); text-align: center; width: 26px; display: block;
+      font-variant-numeric: tabular-nums; text-shadow: 0 0 14px rgba(255,159,10,.7);
     }
+    .digit-sep { font-size: 20px; font-weight: 700; color: rgba(255,159,10,.5); line-height: 38px; margin: 0 1px; }
+    .stats-unit { font-size: 11px; color: var(--dim); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-    .result-display {
-      font-size: clamp(42px, 10vw, 62px);
-      font-weight: 300;
-      color: var(--text-primary);
-      line-height: 1.1;
-      word-break: break-all;
-      text-align: right;
-      transition: color 0.2s;
-      letter-spacing: -2px;
+    /* ── Calculator ── */
+    .calc-shell {
+      width: min(390px,100vw); background: var(--bg-calc); border-radius: 44px;
+      box-shadow: 0 40px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04);
+      padding: 14px 14px 26px;
     }
-
-    /* ── Button Grid ── */
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      padding: 0 8px;
-    }
-
+    .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
+    .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
+    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .2s; }
+    .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
-      aspect-ratio: 1;
-      border: none;
-      border-radius: var(--border-radius-btn);
-      font-family: var(--font);
-      font-size: clamp(18px, 5vw, 24px);
-      font-weight: 400;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.08s ease, filter 0.08s ease, background 0.1s;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-      -webkit-user-select: none;
+      aspect-ratio: 1; border: none; border-radius: 50%;
+      font-family: var(--font); font-size: clamp(17px,5vw,23px); font-weight: 400;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: transform .07s, opacity .07s; user-select: none;
+      position: relative; overflow: hidden; -webkit-user-select: none;
     }
+    .btn::after { content:''; position:absolute; inset:0; border-radius:inherit; background:#fff; opacity:0; transition:opacity .12s; }
+    .btn:active::after { opacity:.18; } .btn:active { transform: scale(.9); }
+    .n  { background: var(--btn-num); color: #fff; } .n:hover  { background: var(--btn-nhov); }
+    .fn { background: var(--btn-fn);  color: #fff; font-size: clamp(13px,3.8vw,17px); } .fn:hover { background: var(--btn-fnhov); }
+    .op { background: var(--btn-op);  color: #fff; font-size: clamp(19px,5.5vw,27px); } .op:hover { background: var(--btn-ophov); }
+    .op.lit { background: #fff; color: var(--btn-op); }
+    .zero { aspect-ratio: auto; border-radius: 40px; grid-column: span 2; justify-content: flex-start; padding-left: 28px; }
+    .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,.22); transform:scale(0); animation:rpl .42s linear; pointer-events:none; }
+    @keyframes rpl { to { transform:scale(2.6); opacity:0; } }
 
-    .btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: white;
-      opacity: 0;
-      transition: opacity 0.15s;
+    /* ── Bottom action bar ── */
+    .action-bar {
+      width: min(390px,100vw); margin-top: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-
-    .btn:active::after { opacity: 0.15; }
-    .btn:active { transform: scale(0.92); }
-
-    .btn-num {
-      background: var(--btn-number);
-      color: var(--text-primary);
+    .comment-toggle-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+      border-radius: 20px; padding: 8px 18px; cursor: pointer; transition: all .2s;
+      font-family: var(--font); color: rgba(255,255,255,.6); font-size: 12px;
     }
-    .btn-num:hover { background: var(--btn-number-hover); }
-
-    .btn-func {
-      background: var(--btn-func);
-      color: var(--text-primary);
-      font-size: clamp(14px, 4vw, 18px);
+    .comment-toggle-btn:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
+    .count-badge { background: var(--accent); color: #000; border-radius: 10px; font-size: 10px; font-weight: 700; padding: 1px 6px; }
+    .nickname-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px; padding: 7px 12px; cursor: pointer; transition: all .2s;
+      font-family: var(--font); color: rgba(255,255,255,.45); font-size: 11px;
     }
-    .btn-func:hover { background: var(--btn-func-hover); }
-
-    .btn-op {
-      background: var(--btn-op);
-      color: #fff;
-      font-size: clamp(20px, 6vw, 28px);
-    }
-    .btn-op:hover { background: var(--btn-op-hover); }
-
-    .btn-zero {
-      aspect-ratio: auto;
-      border-radius: 40px;
-      grid-column: span 2;
-      justify-content: flex-start;
-      padding-left: 30px;
-      letter-spacing: 0;
-    }
-
-    .btn-equal {
-      background: var(--btn-equal);
-      color: #fff;
-    }
-
-    /* active operator highlight */
-    .btn-op.active-op {
-      background: #fff;
-      color: var(--btn-op);
-    }
-
-    /* ── Payment Overlay ── */
-    .payment-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-
-    .payment-overlay.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .payment-card {
-      background: #1e1e20;
-      border-radius: 28px;
-      padding: 28px 24px 24px;
-      width: min(340px, 90vw);
-      text-align: center;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
-      transform: translateY(30px) scale(0.95);
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .payment-overlay.show .payment-card {
-      transform: translateY(0) scale(1);
-    }
-
-    .payment-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,159,10,0.15);
-      border: 1px solid rgba(255,159,10,0.3);
-      border-radius: 20px;
-      padding: 4px 12px;
-      margin-bottom: 14px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .payment-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .payment-subtitle {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 18px;
-      line-height: 1.5;
-    }
-
-    .qr-container {
-      background: #fff;
-      border-radius: 16px;
-      padding: 14px;
-      display: inline-block;
-      margin-bottom: 14px;
-      position: relative;
-    }
-
-    .qr-container img {
-      width: 180px;
-      height: 180px;
-      display: block;
-      border-radius: 4px;
-    }
-
-    .qr-corner {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-color: var(--accent);
-      border-style: solid;
-    }
-    .qr-corner.tl { top: 8px; left: 8px; border-width: 3px 0 0 3px; border-radius: 3px 0 0 3px; }
-    .qr-corner.tr { top: 8px; right: 8px; border-width: 3px 3px 0 0; border-radius: 0 3px 3px 0; }
-    .qr-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; border-radius: 0 0 0 3px; }
-    .qr-corner.br { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; border-radius: 0 3px 3px 0; }
-
-    .scan-hint {
-      font-size: 13px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 6px;
-    }
-
-    .price-hint {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .price-hint strong {
-      color: var(--accent);
-    }
-
-    .payment-expression {
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      background: rgba(255,255,255,0.05);
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-bottom: 14px;
-      font-family: monospace;
-      word-break: break-all;
-    }
-
-    .payment-close {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.5);
-      border-radius: 12px;
-      padding: 10px 20px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: var(--font);
-      width: 100%;
-    }
-    .payment-close:hover {
-      background: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.8);
-    }
-
-    .disclaimer {
-      font-size: 9px;
-      color: rgba(255,255,255,0.18);
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    /* ── Social Proof Ticker ── */
-    .ticker-bar {
-      width: 100%;
-      max-width: min(390px, 100vw);
-      margin-top: 16px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      overflow: hidden;
-      height: 72px;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .ticker-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 5px 14px 0;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      z-index: 2;
-    }
-
-    .ticker-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #30d158;
-      animation: pulse-dot 2s infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .ticker-label {
-      font-size: 9px;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .ticker-scroll-container {
-      position: absolute;
-      top: 18px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow: hidden;
-      mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-      -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-    }
-
-    .ticker-scroll {
-      display: flex;
-      flex-direction: column;
-      animation: scroll-up 18s linear infinite;
-    }
-
-    @keyframes scroll-up {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-50%); }
-    }
-
-    .ticker-item {
-      padding: 3px 14px;
-      font-size: 10.5px;
-      color: var(--ticker-text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.6;
-    }
-
-    .ticker-item .name { color: rgba(255,255,255,0.55); }
-    .ticker-item .expr { color: rgba(255,159,10,0.6); font-family: monospace; }
+    .nickname-btn:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.75); }
+    .nn-av  { font-size: 14px; }
+    .nn-nm  { max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nn-edit { font-size: 9px; color: rgba(255,255,255,.25); }
 
     /* ── Footer ── */
-    .footer {
-      margin-top: 10px;
-      margin-bottom: 20px;
-      font-size: 9px;
-      color: rgba(255,255,255,0.15);
-      text-align: center;
-      letter-spacing: 0.3px;
-      user-select: none;
+    .footer-tag { margin-top: 10px; margin-bottom: 4px; font-size: 9px; color: rgba(255,255,255,.12); text-align: center; letter-spacing: .3px; user-select: none; width: min(390px,100vw); padding: 0 20px; }
+
+    /* ── Ticker ── */
+    .ticker {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--ticker-h);
+      background: rgba(12,12,14,.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,.07); overflow: hidden; z-index: 50;
     }
-
-    /* ── Desktop layout ── */
-    @media (min-width: 600px) {
-      body {
-        justify-content: center;
-        padding: 40px 0 40px 0;
-      }
-
-      .calculator {
-        border-radius: 50px;
-      }
-
-      .btn-grid {
-        gap: 14px;
-      }
+    .ticker-inner { height: 100%; display: flex; flex-direction: column; }
+    .ticker-head { display: flex; align-items: center; gap: 5px; padding: 4px 14px 0; flex-shrink: 0; }
+    .td { width:5px; height:5px; border-radius:50%; background:#30d158; animation:blink 2s infinite; flex-shrink:0; }
+    .tl { font-size:9px; color:rgba(255,255,255,.22); letter-spacing:.5px; text-transform:uppercase; }
+    .ticker-scroll-wrap {
+      flex: 1; overflow: hidden;
+      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
     }
+    .ticker-track { display: flex; flex-direction: column; animation: scrollup 50s linear infinite; }
+    @keyframes scrollup { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+    .ti { padding: 1.5px 14px; font-size: 11px; color: rgba(255,255,255,.38); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.75; }
+    .ti .tn  { color: rgba(255,255,255,.65); }
+    .ti .te  { color: rgba(255,159,10,.65); font-family: monospace; }
+    .ti .tl2 { color: rgba(100,210,255,.6); }
+    .ti.real { color: rgba(255,255,255,.6); }
+    .ti.real .tn { color: #64d2ff; }
+    .ti.real::before { content: '📍 '; }
 
-    /* ── Very small screens ── */
-    @media (max-width: 380px) {
-      .calculator {
-        border-radius: 30px;
-        padding: 14px 10px 22px 10px;
-      }
-
-      .btn-grid {
-        gap: 9px;
-        padding: 0 4px;
-      }
-
-      .display {
-        padding: 10px 16px 14px 16px;
-        min-height: 100px;
-      }
+    /* ── Comment Panel ── */
+    .comment-panel { position: fixed; inset: 0; z-index: 150; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .comment-panel.show { opacity: 1; pointer-events: all; }
+    .comment-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    .comment-sheet {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+      width: min(420px,100vw); max-height: 80vh;
+      background: #18181b; border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; flex-direction: column;
+      transition: transform .35s cubic-bezier(.32,1,.32,1);
+      box-shadow: 0 -20px 60px rgba(0,0,0,.5);
     }
+    .comment-panel.show .comment-sheet { transform: translateX(-50%) translateY(0); }
+    .sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,.2); border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+    .sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 8px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .sheet-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.85); }
+    .sheet-close { background: none; border: none; color: rgba(255,255,255,.4); font-size: 18px; cursor: pointer; padding: 2px 6px; line-height: 1; }
+    .comment-list { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
+    .comment-list::-webkit-scrollbar { width: 3px; }
+    .comment-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
+    .c-card  { background: rgba(255,255,255,.04); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.06); }
+    .c-head  { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .c-avatar { font-size: 18px; line-height: 1; }
+    .c-meta  { flex: 1; }
+    .c-author { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.7); }
+    .c-time  { font-size: 9.5px; color: rgba(255,255,255,.25); margin-left: auto; }
+    .c-text  { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.55; margin-bottom: 8px; }
+    .c-actions { display: flex; align-items: center; gap: 12px; }
+    .c-like, .c-reply-btn {
+      display: flex; align-items: center; gap: 4px; font-size: 11px;
+      color: rgba(255,255,255,.3); cursor: pointer; background: none; border: none;
+      font-family: var(--font); transition: color .15s; padding: 0;
+    }
+    .c-like:hover, .c-reply-btn:hover { color: rgba(255,255,255,.7); }
+    .c-replies { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.05); display: flex; flex-direction: column; gap: 8px; }
+    .reply-card { background: rgba(255,255,255,.03); border-radius: 8px; padding: 8px 10px; }
+    .reply-input-wrap { margin-top: 8px; display: none; }
+    .reply-input-wrap.open { display: flex; gap: 6px; }
+    .reply-input {
+      flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 7px 10px; color: #fff; font-family: var(--font); font-size: 12px;
+      outline: none; resize: none;
+    }
+    .reply-input::placeholder { color: rgba(255,255,255,.25); }
+    .reply-send { background: var(--accent); border: none; border-radius: 10px; padding: 0 12px; color: #000; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font); white-space: nowrap; }
+    .comment-input-bar { padding: 10px 12px 16px; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; }
+    .main-comment-input {
+      flex: 1; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 9px 12px; color: #fff; font-family: var(--font); font-size: 13px;
+      outline: none; resize: none; max-height: 80px;
+    }
+    .main-comment-input::placeholder { color: rgba(255,255,255,.25); }
+    .main-send-btn { background: var(--accent); border: none; border-radius: 12px; padding: 9px 14px; color: #000; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font); flex-shrink: 0; }
 
-    /* ripple */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      transform: scale(0);
-      animation: ripple-anim 0.4s linear;
-      pointer-events: none;
+    /* ── Nickname Modal ── */
+    .nn-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      opacity: 0; pointer-events: none; transition: opacity .25s;
     }
-    @keyframes ripple-anim {
-      to { transform: scale(2.5); opacity: 0; }
+    .nn-overlay.show { opacity: 1; pointer-events: all; }
+    .nn-card {
+      background: #1e1e22; border: 1px solid rgba(255,255,255,.1); border-radius: 20px;
+      padding: 20px 18px 18px; width: min(300px,88vw);
+      transform: scale(.9) translateY(12px); transition: transform .3s cubic-bezier(.34,1.4,.64,1);
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
     }
+    .nn-overlay.show .nn-card { transform: scale(1) translateY(0); }
+    .nn-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.85); text-align: center; margin-bottom: 14px; }
+    .nn-emoji-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; margin-bottom: 14px; }
+    .nn-emoji-opt {
+      aspect-ratio: 1; border-radius: 10px; font-size: 20px; border: 2px solid transparent;
+      background: rgba(255,255,255,.05); cursor: pointer; display: flex; align-items: center;
+      justify-content: center; transition: all .15s;
+    }
+    .nn-emoji-opt:hover { background: rgba(255,255,255,.1); }
+    .nn-emoji-opt.sel  { border-color: var(--accent); background: rgba(255,159,10,.12); }
+    .nn-input {
+      width: 100%; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 9px 12px; color: #fff; font-family: var(--font); font-size: 13px;
+      outline: none; margin-bottom: 10px;
+    }
+    .nn-input::placeholder { color: rgba(255,255,255,.22); }
+    .nn-save { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: 12px; color: #000; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font); }
+    .nn-hint { font-size: 10px; color: rgba(255,255,255,.2); text-align: center; margin-top: 8px; }
+
+    /* ── Payment Overlay ── */
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200; opacity: 0; pointer-events: none; transition: opacity .28s;
+    }
+    .overlay.show { opacity: 1; pointer-events: all; }
+    .pay-card {
+      background: rgba(30,30,33,.96); border: 1px solid rgba(255,255,255,.08); border-radius: 20px;
+      width: min(268px,82vw); overflow: hidden;
+      transform: scale(.9) translateY(16px); transition: transform .3s cubic-bezier(.34,1.46,.64,1);
+      box-shadow: 0 16px 48px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .overlay.show .pay-card { transform: scale(1) translateY(0); }
+    .pay-header { padding: 14px 16px 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .pay-to   { font-size: 10px; color: rgba(255,255,255,.35); margin-bottom: 1px; }
+    .pay-merchant { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
+    .pay-amount-row { padding: 10px 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .pay-amount-label { font-size: 10px; color: rgba(255,255,255,.3); margin-bottom: 2px; }
+    .pay-amount { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+    .pay-amount span { font-size: 17px; font-weight: 500; }
+    .pay-qr-section { padding: 12px 16px 8px; display: flex; flex-direction: column; align-items: center; }
+    .pay-expr { font-size: 11px; color: rgba(255,255,255,.3); background: rgba(255,255,255,.05); border-radius: 6px; padding: 4px 10px; margin-bottom: 10px; font-family: monospace; word-break: break-all; text-align: center; max-width: 100%; }
+    #qr-canvas-wrap { padding: 8px; background: #fff; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+    .pay-hint { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 500; margin-bottom: 2px; }
+    .pay-sub  { font-size: 9.5px; color: rgba(255,255,255,.22); text-align: center; line-height: 1.5; margin-bottom: 10px; }
+    .pay-actions { display: flex; border-top: 1px solid rgba(255,255,255,.07); }
+    .pay-btn { flex:1; padding:12px; border:none; background:transparent; font-family:var(--font); font-size:13px; cursor:pointer; transition:background .15s; color:rgba(255,255,255,.45); }
+    .pay-btn:hover { background: rgba(255,255,255,.05); }
+    .pay-btn.cancel  { border-right: 1px solid rgba(255,255,255,.07); }
+    .pay-btn.confirm { color: rgba(100,210,255,.85); font-weight: 600; }
+    /* Funny message */
+    .funny-msg { padding: 14px 16px 10px; text-align: center; display: none; }
+    .funny-msg.show { display: block; }
+    .funny-icon  { font-size: 36px; margin-bottom: 8px; display: block; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+    .funny-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 4px; }
+    .funny-desc  { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.5; }
+    @keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
+    /* Spinner */
+    .verify-spinner { padding: 18px 16px; text-align: center; display: none; }
+    .verify-spinner.show { display: block; }
+    .spinner-ring { width:28px; height:28px; border:3px solid rgba(255,255,255,.1); border-top-color:rgba(100,210,255,.7); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 8px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .verify-text { font-size: 11px; color: rgba(255,255,255,.4); }
+
+    @media (min-width:600px) { body{padding-top:32px} .calc-shell{border-radius:52px} .btn-grid{gap:13px} }
+    @media (max-width:375px) { .calc-shell{border-radius:34px;padding:10px 10px 22px} .btn-grid{gap:8px;padding:0 2px} .display{min-height:100px;padding:8px 16px 14px} }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <div class="header">
-    <div class="brand">✦ CalcPro™</div>
-    <div class="tagline">专业计算结果查询服务 · 全球首创</div>
+    <div class="brand-row">
+      <span class="brand-name">计算云</span>
+      <span class="brand-tm">™ · Professional</span>
+    </div>
+    <div class="brand-line"></div>
+    <div class="stats-bar">
+      <div class="stats-dot"></div>
+      <span class="stats-label">已服务</span>
+      <div class="stats-counter-wrap">
+        <span class="stats-num" id="stats-num"></span>
+        <span class="stats-unit">位用户完成精准计算</span>
+      </div>
+    </div>
   </div>
 
   <!-- Calculator -->
-  <div class="calc-wrapper">
-    <div class="calculator">
-      <!-- Display -->
-      <div class="display">
-        <div class="expression" id="expression"></div>
-        <div class="result-display" id="result-display">0</div>
+  <div class="calc-shell">
+    <div class="display">
+      <div class="expr" id="expr"></div>
+      <div class="main-num" id="main-num">0</div>
+    </div>
+    <div class="btn-grid">
+      <button class="btn fn" data-a="clear" id="btn-ac">AC</button>
+      <button class="btn fn" data-a="sign">+/−</button>
+      <button class="btn fn" data-a="pct">%</button>
+      <button class="btn op" data-a="op" data-op="÷">÷</button>
+      <button class="btn n" data-a="d" data-d="7">7</button>
+      <button class="btn n" data-a="d" data-d="8">8</button>
+      <button class="btn n" data-a="d" data-d="9">9</button>
+      <button class="btn op" data-a="op" data-op="×">×</button>
+      <button class="btn n" data-a="d" data-d="4">4</button>
+      <button class="btn n" data-a="d" data-d="5">5</button>
+      <button class="btn n" data-a="d" data-d="6">6</button>
+      <button class="btn op" data-a="op" data-op="−">−</button>
+      <button class="btn n" data-a="d" data-d="1">1</button>
+      <button class="btn n" data-a="d" data-d="2">2</button>
+      <button class="btn n" data-a="d" data-d="3">3</button>
+      <button class="btn op" data-a="op" data-op="+">+</button>
+      <button class="btn n zero" data-a="d" data-d="0">0</button>
+      <button class="btn n" data-a="dot">.</button>
+      <button class="btn op" data-a="eq">=</button>
+    </div>
+  </div>
+
+  <!-- Action Bar: Comments + Nickname -->
+  <div class="action-bar">
+    <button class="comment-toggle-btn" onclick="openComments()">
+      💬 神评论区
+      <span class="count-badge" id="comment-count">0</span>
+    </button>
+    <button class="nickname-btn" onclick="openNickname()">
+      <span class="nn-av" id="my-av-disp">🎭</span>
+      <span class="nn-nm" id="my-nm-disp">匿名</span>
+      <span class="nn-edit">✏ 设置</span>
+    </button>
+  </div>
+
+  <div class="footer-tag">© 2026 计算云™ · 闽ICP备2024114514号-1 · 计算结果受专利保护 · 全球服务节点 128 个</div>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <div class="ticker-head">
+        <div class="td"></div>
+        <div class="tl">实时服务记录</div>
       </div>
-
-      <!-- Button Grid -->
-      <div class="btn-grid">
-        <!-- Row 1: func buttons -->
-        <button class="btn btn-func" data-action="clear" id="btn-clear">AC</button>
-        <button class="btn btn-func" data-action="sign" id="btn-sign">+/−</button>
-        <button class="btn btn-func" data-action="percent" id="btn-percent">%</button>
-        <button class="btn btn-op" data-action="op" data-op="÷" id="btn-div">÷</button>
-
-        <!-- Row 2 -->
-        <button class="btn btn-num" data-action="digit" data-digit="7" id="btn-7">7</button>
-        <button class="btn btn-num" data-action="digit" data-digit="8" id="btn-8">8</button>
-        <button class="btn btn-num" data-action="digit" data-digit="9" id="btn-9">9</button>
-        <button class="btn btn-op" data-action="op" data-op="×" id="btn-mul">×</button>
-
-        <!-- Row 3 -->
-        <button class="btn btn-num" data-action="digit" data-digit="4" id="btn-4">4</button>
-        <button class="btn btn-num" data-action="digit" data-digit="5" id="btn-5">5</button>
-        <button class="btn btn-num" data-action="digit" data-digit="6" id="btn-6">6</button>
-        <button class="btn btn-op" data-action="op" data-op="−" id="btn-sub">−</button>
-
-        <!-- Row 4 -->
-        <button class="btn btn-num" data-action="digit" data-digit="1" id="btn-1">1</button>
-        <button class="btn btn-num" data-action="digit" data-digit="2" id="btn-2">2</button>
-        <button class="btn btn-num" data-action="digit" data-digit="3" id="btn-3">3</button>
-        <button class="btn btn-op" data-action="op" data-op="+" id="btn-add">+</button>
-
-        <!-- Row 5 -->
-        <button class="btn btn-num btn-zero" data-action="digit" data-digit="0" id="btn-0">0</button>
-        <button class="btn btn-num" data-action="dot" id="btn-dot">.</button>
-        <button class="btn btn-op btn-equal" data-action="equal" id="btn-equal">=</button>
+      <div class="ticker-scroll-wrap">
+        <div class="ticker-track" id="ticker-track"></div>
       </div>
     </div>
+  </div>
 
-    <!-- Ticker -->
-    <div class="ticker-bar">
-      <div class="ticker-header">
-        <div class="ticker-dot"></div>
-        <div class="ticker-label">实时用户记录</div>
+  <!-- Comment Panel -->
+  <div class="comment-panel" id="comment-panel">
+    <div class="comment-backdrop" onclick="closeComments()"></div>
+    <div class="comment-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title">💬 神评论区 <span id="sheet-count" style="font-weight:400;color:rgba(255,255,255,.4);font-size:12px;"></span></span>
+        <button class="sheet-close" onclick="closeComments()">×</button>
       </div>
-      <div class="ticker-scroll-container">
-        <div class="ticker-scroll" id="ticker-scroll">
-          <!-- dynamically filled -->
-        </div>
+      <div class="comment-list" id="comment-list"></div>
+      <div class="comment-input-bar">
+        <textarea class="main-comment-input" id="main-input" placeholder="说点什么…（匿名发布，随便说）" rows="1"></textarea>
+        <button class="main-send-btn" onclick="submitComment()">发送</button>
       </div>
     </div>
+  </div>
 
-    <div class="footer">© 2026 CalcPro™ · 粤ICP备XXXXXXXX号 · 计算结果受专利保护</div>
+  <!-- Nickname Modal -->
+  <div class="nn-overlay" id="nn-overlay">
+    <div class="nn-card">
+      <div class="nn-title">设置你的身份</div>
+      <div class="nn-emoji-grid" id="nn-emoji-grid"></div>
+      <input class="nn-input" id="nn-input" placeholder="你的昵称（留空则匿名）" maxlength="12" />
+      <button class="nn-save" onclick="saveNickname()">保存</button>
+      <div class="nn-hint">昵称和头像会在评论区显示 · 随时可改</div>
+    </div>
   </div>
 
   <!-- Payment Overlay -->
-  <div class="payment-overlay" id="payment-overlay">
-    <div class="payment-card">
-      <div class="payment-badge">🔒 结果加密中</div>
-      <div class="payment-title">您的计算结果已就绪</div>
-      <div class="payment-subtitle">扫描下方二维码，即可安全获取您的<br/>专属计算结果（仅需 ¥0.1 元）</div>
-
-      <div class="payment-expression" id="payment-expression"></div>
-
-      <div class="qr-container">
-        <div class="qr-corner tl"></div>
-        <div class="qr-corner tr"></div>
-        <div class="qr-corner bl"></div>
-        <div class="qr-corner br"></div>
-        <img src="qr.png" alt="付款二维码" id="qr-img" />
+  <div class="overlay" id="overlay">
+    <div class="pay-card">
+      <div class="pay-header">
+        <div class="pay-to">向</div>
+        <div class="pay-merchant">计算云™ 结果查询服务</div>
       </div>
-
-      <div class="scan-hint">📱 扫码查看结果</div>
-      <div class="price-hint">
-        支持微信 / 支付宝 · 到账后自动显示<br/>
-        首次用户享 <strong>0折优惠</strong>（原价 ¥0.1）
+      <div class="pay-amount-row">
+        <div class="pay-amount-label">付款金额</div>
+        <div class="pay-amount"><span>¥</span>1.99</div>
       </div>
-
-      <button class="payment-close" id="payment-close">
-        暂不查看，放弃本次计算结果
-      </button>
-      <div class="disclaimer">
-        * 本平台采用 256-bit 军用级加密保护您的计算数据。结果仅保留 24 小时，请及时查看。<br/>
-        CalcPro™ 不对因未付款导致的计算结果永久丢失承担责任。
+      <div class="pay-qr-section" id="pay-qr-section">
+        <div class="pay-expr" id="pay-expr"></div>
+        <div id="qr-canvas-wrap"><div id="qr-target"></div></div>
+        <div class="pay-hint">📱 扫码完成付款，自动显示结果</div>
+        <div class="pay-sub">支持微信 / 支付宝 · 实时到账</div>
+      </div>
+      <div class="verify-spinner" id="verify-spinner">
+        <div class="spinner-ring"></div>
+        <div class="verify-text">正在核验付款记录…</div>
+      </div>
+      <div class="funny-msg" id="funny-msg">
+        <span class="funny-icon"  id="funny-icon"></span>
+        <div class="funny-title"  id="funny-title"></div>
+        <div class="funny-desc"   id="funny-desc"></div>
+      </div>
+      <div class="pay-actions">
+        <button class="pay-btn cancel"  id="pay-cancel">暂不查看</button>
+        <button class="pay-btn confirm" id="pay-confirm">已完成付款</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ──────────────────────────────────────────────
-    // Calculator Logic
-    // ──────────────────────────────────────────────
-    let currentVal = '0';
-    let prevVal = '';
-    let operator = null;
-    let waitingForOperand = false;
-    let expressionStr = '';
-    let justCalculated = false;
-    let activeOpBtn = null;
+  // ═══════════════════════════════════════
+  // 0. USER DEVICE INFO + IP GEOLOCATION
+  // ═══════════════════════════════════════
+  var UserInfo = (function() {
+    var ua = navigator.userAgent;
+    var device = '某神秘设备', browser = '某浏览器', network = '';
 
-    const resultDisplay = document.getElementById('result-display');
-    const expressionEl = document.getElementById('expression');
+    if      (/iPhone/.test(ua))    { var v=ua.match(/iPhone OS (\d+)/);  device='iPhone · iOS'+(v?' '+v[1]:''); }
+    else if (/iPad/.test(ua))       { device='iPad'; }
+    else if (/Android/.test(ua))   { var v=ua.match(/Android (\d+)/), m=ua.match(/;\s*([A-Za-z0-9 _\-]+)\sBuild/); device=(m&&m[1].trim().length<22)?m[1].trim():'Android '+(v?v[1]:'')+'手机'; }
+    else if (/Macintosh/.test(ua)) { device='MacBook'; }
+    else if (/Windows/.test(ua))   { device='Windows电脑'; }
 
-    function updateDisplay(val) {
-      let display = val;
-      if (display.length > 12) {
-        const num = parseFloat(display);
-        if (!isNaN(num)) {
-          display = num.toPrecision(8).replace(/\.?0+$/, '');
-          if (display.length > 12) display = num.toExponential(4);
+    if      (/CriOS/.test(ua))      browser='Chrome';
+    else if (/Edg\//.test(ua))      browser='Edge';
+    else if (/Chrome/.test(ua))     browser='Chrome';
+    else if (/Firefox/.test(ua))    browser='Firefox';
+    else if (/Safari/.test(ua))     browser='Safari';
+
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn) {
+      var t = conn.effectiveType || conn.type;
+      if      (t==='4g')                   network='4G';
+      else if (t==='3g')                   network='3G';
+      else if (t==='wifi'||t==='ethernet') network='WiFi';
+      else if (t)                          network=t.toUpperCase();
+    }
+
+    return { device:device, browser:browser, network:network,
+             screen:screen.width+'×'+screen.height,
+             province:'', city:'', isp:'', ip:'' };
+  })();
+
+  function normalizeISP(isp) {
+    if (!isp) return '';
+    if (/Mobile|移动/.test(isp))  return '中国移动';
+    if (/Telecom|电信/.test(isp)) return '中国电信';
+    if (/Unicom|联通/.test(isp))  return '中国联通';
+    if (/Broadband/.test(isp))    return '宽带';
+    return isp.length > 12 ? isp.slice(0,12) : isp;
+  }
+
+  // Fetch IP geolocation (free, no key, ~45 req/min limit)
+  fetch('https://ip-api.com/json/?fields=status,regionName,city,isp,mobile,query&lang=zh-CN')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      if (d.status === 'success') {
+        UserInfo.province = d.regionName ? d.regionName.replace('省','').replace('市','').replace('自治区','').replace('特别行政区','') : '';
+        UserInfo.city     = d.city ? d.city.replace('市','') : '';
+        UserInfo.isp      = normalizeISP(d.isp);
+        UserInfo.ip       = d.query || '';
+        var loc  = [UserInfo.province, UserInfo.city].filter(Boolean).join(' · ');
+        var net2 = [UserInfo.isp, UserInfo.network].filter(Boolean).join(' ');
+        addRealTick('<span class="tn">'+UserInfo.device+'</span> · <span class="tl2">'+(loc||'未知地区')+'</span>'+(net2?' · '+net2:'')+' 刚刚来了', true);
+      }
+    }).catch(function(){});
+
+  function myDesc() {
+    var loc = [UserInfo.province, UserInfo.city].filter(Boolean).join(' ');
+    var net = [UserInfo.isp, UserInfo.network].filter(Boolean).join('/');
+    return [UserInfo.device, UserInfo.browser, loc, net].filter(Boolean).join(' · ');
+  }
+
+  // ═══════════════════════════════════════
+  // 1. SLOT MACHINE COUNTER
+  // ═══════════════════════════════════════
+  (function() {
+    var LAUNCH = new Date('2026-01-10T08:00:00+08:00');
+    var BASE = 2631, DAILY = 13, HOURLY = 0.52, MIN_INC = 0.008;
+    var DIGIT_H = 38, CYCLES = 5;
+
+    function getCount() {
+      var ms = new Date() - LAUNCH;
+      return ms < 0 ? BASE : Math.floor(BASE + (ms/60000)*(DAILY/1440+HOURLY/60+MIN_INC));
+    }
+
+    function buildSlot(ch) {
+      var target = parseInt(ch);
+      var slot = document.createElement('div'); slot.className = 'digit-slot';
+      var reel = document.createElement('div'); reel.className = 'digit-reel';
+      for (var c = 0; c < CYCLES; c++) {
+        for (var d = 0; d < 10; d++) {
+          var sp = document.createElement('span'); sp.textContent = d; reel.appendChild(sp);
         }
       }
-      resultDisplay.textContent = display;
-    }
-
-    function clearActiveOp() {
-      if (activeOpBtn) {
-        activeOpBtn.classList.remove('active-op');
-        activeOpBtn = null;
+      for (var d = 0; d <= target; d++) {
+        var sp = document.createElement('span'); sp.textContent = d; reel.appendChild(sp);
       }
+      slot.appendChild(reel);
+      return { slot:slot, reel:reel };
     }
 
-    function setActiveOp(btn) {
-      clearActiveOp();
-      if (btn) {
-        btn.classList.add('active-op');
-        activeOpBtn = btn;
-      }
-    }
-
-    function handleDigit(digit) {
-      if (justCalculated) {
-        currentVal = digit;
-        expressionStr = '';
-        justCalculated = false;
-        clearActiveOp();
-      } else if (waitingForOperand) {
-        currentVal = digit;
-        waitingForOperand = false;
-      } else {
-        currentVal = currentVal === '0' ? digit : currentVal + digit;
-        if (currentVal.length > 15) return;
-      }
-      updateDisplay(currentVal);
-    }
-
-    function handleDot() {
-      if (justCalculated) {
-        currentVal = '0.';
-        justCalculated = false;
-        clearActiveOp();
-      } else if (waitingForOperand) {
-        currentVal = '0.';
-        waitingForOperand = false;
-      } else if (!currentVal.includes('.')) {
-        currentVal += '.';
-      }
-      updateDisplay(currentVal);
-    }
-
-    function handleOp(op, btn) {
-      if (operator && !waitingForOperand) {
-        const result = calculate(parseFloat(prevVal), parseFloat(currentVal), operator);
-        currentVal = String(result);
-        prevVal = String(result);
-        expressionStr = String(result) + ' ' + op;
-      } else {
-        prevVal = currentVal;
-        expressionStr = currentVal + ' ' + op;
-      }
-      operator = op;
-      waitingForOperand = true;
-      justCalculated = false;
-      updateDisplay(currentVal);
-      expressionEl.textContent = expressionStr;
-      setActiveOp(btn);
-    }
-
-    function calculate(a, b, op) {
-      switch (op) {
-        case '+': return a + b;
-        case '−': return a - b;
-        case '×': return a * b;
-        case '÷': return b !== 0 ? a / b : 'Error';
-        default: return b;
-      }
-    }
-
-    function handleEqual() {
-      if (!operator) return;
-      const a = parseFloat(prevVal);
-      const b = parseFloat(currentVal);
-      const fullExpr = `${prevVal} ${operator} ${currentVal}`;
-      const result = calculate(a, b, operator);
-      const resultStr = String(parseFloat(result.toFixed(10)));
-
-      expressionStr = fullExpr + ' =';
-      expressionEl.textContent = expressionStr;
-
-      // Don't show result — show payment gate instead
-      showPayment(fullExpr, resultStr);
-
-      justCalculated = true;
-      waitingForOperand = false;
-      operator = null;
-      clearActiveOp();
-
-      // add to ticker
-      addTickerEntry(fullExpr);
-    }
-
-    function handleClear() {
-      currentVal = '0';
-      prevVal = '';
-      operator = null;
-      waitingForOperand = false;
-      expressionStr = '';
-      justCalculated = false;
-      expressionEl.textContent = '';
-      updateDisplay('0');
-      clearActiveOp();
-      document.getElementById('btn-clear').textContent = 'AC';
-    }
-
-    function handleSign() {
-      if (currentVal === '0' || currentVal === 'Error') return;
-      currentVal = currentVal.startsWith('-') ? currentVal.slice(1) : '-' + currentVal;
-      updateDisplay(currentVal);
-    }
-
-    function handlePercent() {
-      const val = parseFloat(currentVal);
-      if (isNaN(val)) return;
-      currentVal = String(val / 100);
-      updateDisplay(currentVal);
-    }
-
-    // button click handlers
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        createRipple(btn, e);
-        const action = btn.dataset.action;
-        if (action === 'digit') {
-          handleDigit(btn.dataset.digit);
-          if (currentVal !== '0') document.getElementById('btn-clear').textContent = 'C';
-        } else if (action === 'dot') {
-          handleDot();
-        } else if (action === 'op') {
-          handleOp(btn.dataset.op, btn);
-        } else if (action === 'equal') {
-          handleEqual();
-        } else if (action === 'clear') {
-          handleClear();
-        } else if (action === 'sign') {
-          handleSign();
-        } else if (action === 'percent') {
-          handlePercent();
+    function run(target) {
+      var container = document.getElementById('stats-num');
+      container.innerHTML = '';
+      var formatted = target.toLocaleString('zh-CN');
+      var slots = [];
+      Array.from(formatted).forEach(function(ch) {
+        if (ch === ',' || ch === '\u202f') {
+          var sep = document.createElement('span'); sep.className = 'digit-sep'; sep.textContent = ','; container.appendChild(sep);
+        } else {
+          var r = buildSlot(ch); slots.push({reel:r.reel, digit:parseInt(ch)}); container.appendChild(r.slot);
         }
       });
+      var n = slots.length;
+      slots.forEach(function(s, i) {
+        var finalPos = (CYCLES*10 + s.digit) * DIGIT_H;
+        var stopDelay = (n-1-i)*420 + 300;
+        var spinDur   = 550 + (n-1-i)*180;
+        var f = 0;
+        var iv = setInterval(function(){ f=(f+3)%10; s.reel.style.transform='translateY(-'+(f*DIGIT_H)+'px)'; }, 40);
+        setTimeout(function() {
+          clearInterval(iv);
+          s.reel.style.transition = 'transform '+spinDur+'ms cubic-bezier(.12,.8,.32,1)';
+          s.reel.style.transform  = 'translateY(-'+finalPos+'px)';
+          setTimeout(function() {
+            var sl = s.reel.parentElement;
+            sl.style.boxShadow='0 0 18px rgba(255,159,10,.55),inset 0 0 8px rgba(255,159,10,.15)';
+            sl.style.borderColor='rgba(255,159,10,.6)';
+            sl.style.transition='box-shadow .3s,border-color .3s';
+            setTimeout(function(){ sl.style.boxShadow=''; sl.style.borderColor=''; }, 600);
+          }, spinDur);
+        }, stopDelay);
+      });
+    }
+    run(getCount());
+  })();
+
+  // ═══════════════════════════════════════
+  // 2. CALCULATOR LOGIC
+  // ═══════════════════════════════════════
+  var cur='0', prev='', op=null, waitOp=false, justCalc=false, litBtn=null;
+  var numEl = document.getElementById('main-num');
+  var exprEl = document.getElementById('expr');
+
+  function setDisplay(v) {
+    var s = String(v);
+    if (s.length > 12) { var n=parseFloat(s); if(!isNaN(n)){s=n.toPrecision(8).replace(/\.?0+$/,''); if(s.length>12)s=n.toExponential(4);} }
+    numEl.textContent = s; numEl.style.color = '';
+  }
+  function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
+  function setLit(b)  { clearLit(); if(b){b.classList.add('lit'); litBtn=b;} }
+  function calc(a,b,o) {
+    if(o==='+') return a+b; if(o==='−') return a-b; if(o==='×') return a*b;
+    if(o==='÷') return b!==0?a/b:'Error'; return b;
+  }
+  function onDigit(d) {
+    if(justCalc){cur=d;exprEl.textContent='';justCalc=false;clearLit();}
+    else if(waitOp){cur=d;waitOp=false;}
+    else{cur=cur==='0'?d:cur+d; if(cur.length>15)return;}
+    setDisplay(cur); document.getElementById('btn-ac').textContent='C';
+  }
+  function onDot() {
+    if(justCalc){cur='0.';justCalc=false;clearLit();}
+    else if(waitOp){cur='0.';waitOp=false;}
+    else if(!cur.includes('.'))cur+='.';
+    setDisplay(cur);
+  }
+  function onOp(o,btn) {
+    if(op&&!waitOp){var r=calc(parseFloat(prev),parseFloat(cur),op);cur=String(r);prev=cur;exprEl.textContent=cur+' '+o;}
+    else{prev=cur;exprEl.textContent=cur+' '+o;}
+    op=o;waitOp=true;justCalc=false;setDisplay(cur);setLit(btn);
+  }
+  function onEq() {
+    if(!op) return;
+    var a=parseFloat(prev), b=parseFloat(cur);
+    var fullExpr=prev+' '+op+' '+cur;
+    var r=calc(a,b,op);
+    exprEl.textContent=fullExpr+' =';
+    cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
+    showPayment(fullExpr);
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
+  }
+  function onClear() {
+    cur='0';prev='';op=null;waitOp=false;justCalc=false;
+    exprEl.textContent='';setDisplay('0');clearLit();
+    document.getElementById('btn-ac').textContent='AC';
+  }
+  function onSign() { if(cur==='0'||cur==='Error')return; cur=cur.startsWith('-')?cur.slice(1):'-'+cur; setDisplay(cur); }
+  function onPct()  { var v=parseFloat(cur); if(isNaN(v))return; cur=String(v/100); setDisplay(cur); }
+
+  document.querySelectorAll('.btn').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+      ripple(b,e);
+      var a=b.dataset.a;
+      if      (a==='d')     onDigit(b.dataset.d);
+      else if (a==='dot')   onDot();
+      else if (a==='op')    onOp(b.dataset.op, b);
+      else if (a==='eq')    onEq();
+      else if (a==='clear') onClear();
+      else if (a==='sign')  onSign();
+      else if (a==='pct')   onPct();
     });
+  });
+  document.addEventListener('keydown', function(e) {
+    if      (e.key>='0'&&e.key<='9')          onDigit(e.key);
+    else if (e.key==='.')                       onDot();
+    else if (e.key==='+')                       onOp('+',null);
+    else if (e.key==='-')                       onOp('−',null);
+    else if (e.key==='*')                       onOp('×',null);
+    else if (e.key==='/'){e.preventDefault();   onOp('÷',null);}
+    else if (e.key==='Enter'||e.key==='=')      onEq();
+    else if (e.key==='Backspace')              {cur=cur.length>1?cur.slice(0,-1):'0';setDisplay(cur);}
+    else if (e.key==='Escape')                  onClear();
+  });
+  function ripple(btn,e) {
+    var r=document.createElement('span'); r.className='ripple';
+    var sz=Math.max(btn.clientWidth,btn.clientHeight), rc=btn.getBoundingClientRect();
+    r.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+((e.clientX||rc.left+rc.width/2)-rc.left-sz/2)+'px;top:'+((e.clientY||rc.top+rc.height/2)-rc.top-sz/2)+'px';
+    btn.appendChild(r); r.addEventListener('animationend',function(){r.remove();});
+  }
 
-    // keyboard support
-    document.addEventListener('keydown', e => {
-      if (e.key >= '0' && e.key <= '9') handleDigit(e.key);
-      else if (e.key === '.') handleDot();
-      else if (e.key === '+') handleOp('+', null);
-      else if (e.key === '-') handleOp('−', null);
-      else if (e.key === '*') handleOp('×', null);
-      else if (e.key === '/') { e.preventDefault(); handleOp('÷', null); }
-      else if (e.key === 'Enter' || e.key === '=') handleEqual();
-      else if (e.key === 'Backspace') {
-        if (currentVal.length > 1) currentVal = currentVal.slice(0, -1);
-        else currentVal = '0';
-        updateDisplay(currentVal);
-      }
-      else if (e.key === 'Escape') handleClear();
-    });
+  // ═══════════════════════════════════════
+  // 3. PAYMENT OVERLAY + FUNNY MESSAGES
+  // ═══════════════════════════════════════
+  var FUNNY = [
+    {icon:'🎉', title:'核验完成！', desc:'¥1.99 已在路上了，就是方向暂时不太对，稍等'},
+    {icon:'🔮', title:'答案已写入命运之书', desc:'下辈子转世时系统会自动推送给您，请耐心等待'},
+    {icon:'📦', title:'计算结果快递途中', desc:'预计 3-5 个工作日送达，请在家等候签收'},
+    {icon:'🌟', title:'感谢您的信任与耐心', desc:'我们把这份感动存入了数据库（但结果不会）'},
+    {icon:'☕', title:'结果正在精心准备中', desc:'就像泡一壶好茶，慢慢来，急不得的'},
+    {icon:'🏅', title:'诚信用户认证通过', desc:'系统相信您真的付了，只是钱暂时迷路了'},
+    {icon:'🌈', title:'今日勇气挑战完成！', desc:'您已超越 99% 的计算器用户，明天继续加油'},
+    {icon:'🎭', title:'核验通过了！', desc:'结果嘛……系统这边也不是很清楚，大家一起等'},
+    {icon:'💌', title:'结果已安全加密保存', desc:'密钥由付款记录解锁，而付款记录显示……嗯'},
+    {icon:'🎪', title:'今日最勇挑战者', desc:'您的勇气已经让整个服务器都深受感动'},
+    {icon:'🧠', title:'聪明人出没', desc:'¥1.99 没花出去，脑子动了动，也挺好的'},
+    {icon:'🦅', title:'薅羊毛成就达成', desc:'系统已备案，下次见到您会格外亲切地打招呼'},
+  ];
 
-    // ──────────────────────────────────────────────
-    // Ripple
-    // ──────────────────────────────────────────────
-    function createRipple(btn, e) {
-      const ripple = document.createElement('span');
-      ripple.className = 'ripple';
-      const size = Math.max(btn.clientWidth, btn.clientHeight);
-      const rect = btn.getBoundingClientRect();
-      const x = (e.clientX || rect.left + rect.width/2) - rect.left - size/2;
-      const y = (e.clientY || rect.top + rect.height/2) - rect.top - size/2;
-      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
-      btn.appendChild(ripple);
-      ripple.addEventListener('animationend', () => ripple.remove());
+  var overlay      = document.getElementById('overlay');
+  var payQRSection = document.getElementById('pay-qr-section');
+  var verifySpinner = document.getElementById('verify-spinner');
+  var funnyMsg     = document.getElementById('funny-msg');
+  var qrGenerated  = false, lastExpr = '';
+
+  function resetPayCard() {
+    payQRSection.style.display='flex';
+    verifySpinner.classList.remove('show');
+    funnyMsg.classList.remove('show');
+    document.getElementById('pay-confirm').style.display='';
+  }
+  function showPayment(expr) {
+    lastExpr = expr;
+    document.getElementById('pay-expr').textContent = '🔐 ' + expr + ' = ████';
+    resetPayCard();
+    overlay.classList.add('show');
+    if (!qrGenerated) {
+      document.getElementById('qr-target').innerHTML='';
+      new QRCode(document.getElementById('qr-target'), {
+        text:'https://miracle2017.github.io/calcpro/',
+        width:180, height:180, colorDark:'#000', colorLight:'#fff',
+        correctLevel:QRCode.CorrectLevel.M
+      });
+      qrGenerated = true;
     }
+  }
+  document.getElementById('pay-cancel').addEventListener('click', function() {
+    overlay.classList.remove('show');
+    numEl.textContent='？？？'; numEl.style.color='#ff453a';
+    setTimeout(function(){ setDisplay(cur); }, 1600);
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> 查询 <span class="te">'+lastExpr+'</span>，看到¥1.99后，默默关掉了弹窗', true);
+  });
+  document.getElementById('pay-confirm').addEventListener('click', function() {
+    payQRSection.style.display='none';
+    verifySpinner.classList.add('show');
+    document.getElementById('pay-confirm').style.display='none';
+    var delay = 1800 + Math.random()*1400;
+    setTimeout(function() {
+      verifySpinner.classList.remove('show');
+      var msg = FUNNY[Math.floor(Math.random()*FUNNY.length)];
+      document.getElementById('funny-icon').textContent  = msg.icon;
+      document.getElementById('funny-title').textContent = msg.title;
+      document.getElementById('funny-desc').textContent  = msg.desc;
+      funnyMsg.classList.add('show');
+      addRealTick('<span class="tn">'+UserInfo.device+'</span> 对 <span class="te">'+lastExpr+'</span> 点击「已完成付款」，系统表示存疑 🤨', true);
+    }, delay);
+  });
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) document.getElementById('pay-cancel').click(); });
 
-    // ──────────────────────────────────────────────
-    // Payment Overlay
-    // ──────────────────────────────────────────────
-    const overlay = document.getElementById('payment-overlay');
-    const paymentExprEl = document.getElementById('payment-expression');
+  // ═══════════════════════════════════════
+  // 4. COMMENT SYSTEM (localStorage)
+  // ═══════════════════════════════════════
+  var COM_AVATARS = ['🎭','🐼','🦊','🐸','🦉','🎪','🐯','🦋','🎨','🌊','🎸','🚀','🌈','🍉','🦄'];
+  var SEED = [
+    {id:'s1',text:'算了1+1，支付弹窗秒弹，这效率比我老板还高',author:'🎭',device:'某iPhone用户',time:Date.now()-7200000,likes:31,replies:[
+      {id:'s1r1',text:'投诉部门正在打盹，请稍后再试',author:'🎪',device:'客服机器人™',time:Date.now()-6800000,likes:58},
+      {id:'s1r2',text:'哈哈哈哈哈哈',author:'🐸',device:'某Android用户',time:Date.now()-3600000,likes:12}
+    ]},
+    {id:'s2',text:'我已经连续三天来这里计算，坚决不付款，这是原则问题',author:'🦊',device:'MacBook用户',time:Date.now()-5000000,likes:77,replies:[
+      {id:'s2r1',text:'你是本月最坚强的用户，系统已为你立传',author:'🦉',device:'某神秘设备',time:Date.now()-4500000,likes:44}
+    ]},
+    {id:'s3',text:'发给男朋友看，他以为是真的，付款了，哈哈哈哈',author:'🌈',device:'iPhone用户',time:Date.now()-2400000,likes:104,replies:[]},
+    {id:'s4',text:'我要在这里表白：如果你在用计算器算什么，结果是你爱我就好了',author:'🌊',device:'某Android用户',time:Date.now()-1200000,likes:88,replies:[
+      {id:'s4r1',text:'这是我见过最浪漫的地方，没有之一',author:'🎨',device:'Chrome用户',time:Date.now()-900000,likes:62}
+    ]},
+    {id:'s5',text:'¥1.99我觉得挺值的，算一个1024÷0，系统告诉我Error，很准确',author:'🚀',device:'Windows电脑',time:Date.now()-600000,likes:39,replies:[]},
+  ];
 
-    function showPayment(expr, result) {
-      paymentExprEl.textContent = `🔐 ${expr} = ████`;
-      overlay.classList.add('show');
-    }
+  function loadComments() {
+    try { var raw=localStorage.getItem('calcpro_comments'); if(raw) return JSON.parse(raw); } catch(e){}
+    localStorage.setItem('calcpro_comments', JSON.stringify(SEED));
+    return JSON.parse(JSON.stringify(SEED));
+  }
+  function saveComments(data) { try{localStorage.setItem('calcpro_comments',JSON.stringify(data));}catch(e){} }
+  function getMyAvatar() {
+    var av=localStorage.getItem('my_avatar');
+    if(!av){av=COM_AVATARS[Math.floor(Math.random()*COM_AVATARS.length)];localStorage.setItem('my_avatar',av);}
+    return av;
+  }
+  function timeAgo(ts) {
+    var d=Date.now()-ts, m=Math.floor(d/60000), h=Math.floor(m/60), day=Math.floor(h/24);
+    if(m<1)return '刚刚'; if(m<60)return m+'分钟前'; if(h<24)return h+'小时前'; return day+'天前';
+  }
 
-    document.getElementById('payment-close').addEventListener('click', () => {
-      overlay.classList.remove('show');
-      // after close, let user see the result with a "you missed out" display
-      updateDisplay('¿？？?');
-      setTimeout(() => updateDisplay(currentVal || '0'), 1800);
-    });
+  function renderCommentCard(c, isReply) {
+    isReply = isReply || false;
+    var cls = isReply ? 'reply-card' : 'c-card';
+    var repliesHtml = (!isReply && c.replies && c.replies.length)
+      ? '<div class="c-replies">' + c.replies.map(function(r){return renderCommentCard(r,true);}).join('') + '</div>' : '';
+    var replyBtn = !isReply
+      ? '<button class="c-reply-btn" onclick="toggleReplyInput(\''+c.id+'\')">💬 回复</button>' : '';
+    var replyInput = !isReply
+      ? '<div class="reply-input-wrap" id="ri-'+c.id+'">'
+        + '<textarea class="reply-input" id="rit-'+c.id+'" placeholder="回复…" rows="1"></textarea>'
+        + '<button class="reply-send" onclick="submitReply(\''+c.id+'\')">发送</button>'
+        + '</div>' : '';
+    return '<div class="'+cls+'" id="c-'+c.id+'">'
+      + '<div class="c-head">'
+      + '<div class="c-avatar">'+c.author+'</div>'
+      + '<div class="c-meta"><div class="c-author">'+(c.device||'匿名')+'</div></div>'
+      + '<div class="c-time">'+timeAgo(c.time)+'</div>'
+      + '</div>'
+      + '<div class="c-text">'+c.text+'</div>'
+      + '<div class="c-actions">'
+      + '<button class="c-like" id="like-'+c.id+'" onclick="toggleLike(\''+c.id+'\')">❤ '+c.likes+'</button>'
+      + replyBtn
+      + '</div>'
+      + repliesHtml
+      + replyInput
+      + '</div>';
+  }
 
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) overlay.classList.remove('show');
-    });
+  function renderComments() {
+    var data = loadComments();
+    document.getElementById('comment-list').innerHTML = data.map(function(c){return renderCommentCard(c);}).join('');
+    var total = data.reduce(function(s,c){return s+1+(c.replies||[]).length;}, 0);
+    document.getElementById('comment-count').textContent = total;
+    document.getElementById('sheet-count').textContent = total + ' 条神评';
+  }
+  function toggleReplyInput(id) {
+    var wrap=document.getElementById('ri-'+id);
+    var open=wrap.classList.toggle('open');
+    if(open) document.getElementById('rit-'+id).focus();
+  }
+  function toggleLike(id) {
+    var data=loadComments(), key='liked_'+id, liked=localStorage.getItem(key);
+    function find(list,id){for(var i=0;i<list.length;i++){if(list[i].id===id)return list[i];if(list[i].replies){var r=find(list[i].replies,id);if(r)return r;}}return null;}
+    var c=find(data,id); if(!c)return;
+    if(liked){c.likes=Math.max(0,c.likes-1);localStorage.removeItem(key);}
+    else{c.likes++;localStorage.setItem(key,'1');}
+    saveComments(data); renderComments();
+  }
+  function submitComment() {
+    var inp=document.getElementById('main-input'), text=inp.value.trim();
+    if(!text)return;
+    var data=loadComments();
+    data.unshift({id:'u'+Date.now(), text:text, author:getMyAvatar(),
+      device:localStorage.getItem('my_nickname')||UserInfo.device,
+      time:Date.now(), likes:0, replies:[]});
+    saveComments(data); inp.value=''; inp.style.height='auto';
+    renderComments(); document.getElementById('comment-list').scrollTop=0;
+  }
+  function submitReply(parentId) {
+    var inp=document.getElementById('rit-'+parentId), text=inp.value.trim();
+    if(!text)return;
+    var data=loadComments(), parent=data.find(function(c){return c.id===parentId;});
+    if(!parent)return;
+    parent.replies.push({id:'r'+Date.now(), text:text, author:getMyAvatar(),
+      device:localStorage.getItem('my_nickname')||UserInfo.device,
+      time:Date.now(), likes:0});
+    saveComments(data); inp.value=''; renderComments();
+  }
+  function openComments()  { document.getElementById('comment-panel').classList.add('show'); renderComments(); }
+  function closeComments() { document.getElementById('comment-panel').classList.remove('show'); }
 
-    // ──────────────────────────────────────────────
-    // Ticker / Social Proof
-    // ──────────────────────────────────────────────
-    const firstNames = ['张','李','王','赵','陈','刘','杨','黄','周','吴','郑','孙','徐','朱','马','胡','林','郭','何','高'];
-    const lastNames  = ['伟','芳','娜','秀英','敏','静','丽','强','磊','洋','艳','勇','军','杰','娟','涛','明','超','霞','平'];
+  var mainInp = document.getElementById('main-input');
+  if (mainInp) mainInp.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,80)+'px'; });
 
-    function fakeName() {
-      const f = firstNames[Math.floor(Math.random() * firstNames.length)];
-      const l = lastNames[Math.floor(Math.random() * lastNames.length)];
-      // mask middle if 2+ chars
-      const full = f + l;
-      if (full.length >= 3) return full[0] + '*'.repeat(full.length - 2) + full[full.length - 1];
-      return full[0] + '*';
-    }
+  setTimeout(function(){
+    var d=loadComments(), t=d.reduce(function(s,c){return s+1+(c.replies||[]).length;},0);
+    document.getElementById('comment-count').textContent=t;
+  }, 100);
 
-    function fakeMinutes() {
-      const t = Math.floor(Math.random() * 58) + 1;
-      return t < 60 ? `${t}分钟前` : `${Math.floor(t/60)}小时前`;
-    }
+  // ═══════════════════════════════════════
+  // 5. TICKER
+  // ═══════════════════════════════════════
+  var FN=['张','李','王','赵','陈','刘','杨','黄','周','吴','郑','孙','徐','朱','马','胡','林','郭','何','高','梁','钱','冯','韩','许','邓','萧'];
+  var LN=['伟','芳','娜','秀英','敏','静','丽','强','磊','洋','艳','勇','军','杰','娟','涛','明','超','霞','平','帅','萌'];
+  var OPS=['+','−','×','÷'];
+  var PROVINCES=['广东','北京','上海','浙江','江苏','四川','湖南','湖北','陕西','山东','河南','福建','重庆','云南','安徽','天津','辽宁','黑龙江','吉林','内蒙古','新疆'];
+  var ISPS=['中国移动','中国电信','中国联通','中国广电'];
+  var DEVICES=['iPhone 15 Pro','iPhone 14','iPhone 13','小米14','小米13','华为Mate60','华为P60','OPPO Find X7','vivo X100','三星S24','Redmi K70'];
 
-    function fakeExpr() {
-      const ops = ['+', '-', '×', '÷'];
-      const a = Math.floor(Math.random() * 9999) + 1;
-      const b = Math.floor(Math.random() * 9999) + 1;
-      const op = ops[Math.floor(Math.random() * ops.length)];
-      return `${a} ${op} ${b}`;
-    }
+  function rname()     { var f=FN[~~(Math.random()*FN.length)],l=LN[~~(Math.random()*LN.length)],s=f+l; return s.length>=3?s[0]+'*'.repeat(s.length-2)+s[s.length-1]:s[0]+'*'; }
+  function rtime()     { var m=~~(Math.random()*58)+1; return m<60?m+'分钟前':~~(m/60)+'小时前'; }
+  function rexpr()     { return (~~(Math.random()*9999)+1)+' '+OPS[~~(Math.random()*4)]+' '+(~~(Math.random()*9999)+1); }
+  function rprovince() { return PROVINCES[~~(Math.random()*PROVINCES.length)]; }
+  function risp()      { return ISPS[~~(Math.random()*ISPS.length)]; }
+  function rdevice()   { return DEVICES[~~(Math.random()*DEVICES.length)]; }
+  function rnet()      { return ['4G','5G','WiFi'][~~(Math.random()*3)]; }
 
-    const tickerData = [];
-    for (let i = 0; i < 20; i++) {
-      tickerData.push({ name: fakeName(), expr: fakeExpr(), time: fakeMinutes() });
-    }
+  var FAKE_T = [
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+isp+' '+net+' '+t+'用 '+dv+' 查询了 <span class="te">'+e+'</span>'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>的<span class="tn">'+n+'</span> 算了 <span class="te">'+e+'</span>，看到¥1.99后，沉默了'; },
+    function(n,e,t,pv,isp,dv,net){ return dv+' · '+isp+' '+net+' · <span class="tl2">'+pv+'</span> '+t+'：计算 <span class="te">'+e+'</span>，拒绝付款，结果永久失踪'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>（<span class="tl2">'+pv+'</span> · '+isp+'）'+t+'试图免费查看 <span class="te">'+e+'</span>，被识破'; },
+    function(n,e,t,pv,isp,dv,net){ return '来自<span class="tl2">'+pv+'</span>的 '+dv+' 用户 '+t+' 声称已付款查询 <span class="te">'+e+'</span>，系统表示存疑'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> 在 '+pv+' 用 '+dv+'（'+isp+' '+net+'）'+t+' 算了 <span class="te">'+e+'</span>，付款弹窗弹出后立即关闭'; },
+    function(n,e,t,pv,isp,dv,net){ return dv+' · <span class="tl2">'+pv+'</span> '+t+'：<span class="te">'+e+'</span> = ████  付款通道打开了0.3秒'; },
+  ];
 
-    function addTickerEntry(expr) {
-      tickerData.unshift({ name: '您', expr, time: '刚刚' });
-    }
+  var tickerData = [];
+  for (var i = 0; i < 28; i++) {
+    var n=rname(),e=rexpr(),t=rtime(),pv=rprovince(),isp=risp(),dv=rdevice(),net=rnet();
+    tickerData.push({html: FAKE_T[~~(Math.random()*FAKE_T.length)](n,e,t,pv,isp,dv,net), real:false});
+  }
 
-    function renderTicker() {
-      const scroll = document.getElementById('ticker-scroll');
-      const items = [...tickerData, ...tickerData]; // duplicate for infinite loop
-      scroll.innerHTML = items.map(d =>
-        `<div class="ticker-item">
-          <span class="name">${d.name}</span> 在 ${d.time} 查询了
-          <span class="expr">${d.expr}</span> 的结果
-        </div>`
-      ).join('');
-    }
-
+  function addRealTick(html, real) {
+    tickerData.unshift({html:html, real:!!real});
+    if (tickerData.length > 50) tickerData.pop();
     renderTicker();
+  }
+  function renderTicker() {
+    var doubled = tickerData.concat(tickerData);
+    document.getElementById('ticker-track').innerHTML = doubled.map(function(x){
+      return '<div class="ti'+(x.real?' real':'')+'">'+x.html+'</div>';
+    }).join('');
+  }
 
-    // periodically refresh fake data
-    setInterval(() => {
-      tickerData.push({ name: fakeName(), expr: fakeExpr(), time: fakeMinutes() });
-      if (tickerData.length > 30) tickerData.shift();
-      renderTicker();
-    }, 5000);
+  renderTicker();
+  setInterval(function() {
+    var n=rname(),e=rexpr(),t=rtime(),pv=rprovince(),isp=risp(),dv=rdevice(),net=rnet();
+    tickerData.push({html:FAKE_T[~~(Math.random()*FAKE_T.length)](n,e,t,pv,isp,dv,net),real:false});
+    if(tickerData.length>50)tickerData.shift();
+    renderTicker();
+  }, 9000);
+
+  setTimeout(function(){
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> · '+UserInfo.browser+(UserInfo.network?' · '+UserInfo.network:'')+' 刚刚打开了计算云™', true);
+  }, 200);
+
+  // ═══════════════════════════════════════
+  // 6. NICKNAME SYSTEM
+  // ═══════════════════════════════════════
+  var ALL_AVATARS = ['🎭','🐼','🦊','🐸','🦉','🎪','🐯','🦋','🎨','🌊','🎸','🚀','🌈','🍉','🦄','🎃','🌸','🦈','🐉','🍀'];
+
+  function getNickname() { return localStorage.getItem('my_nickname')||''; }
+  function getAvatar()   { return localStorage.getItem('my_avatar')||ALL_AVATARS[0]; }
+
+  function updateNicknameDisplay() {
+    var nm=getNickname(), av=getAvatar();
+    document.getElementById('my-av-disp').textContent = av;
+    document.getElementById('my-nm-disp').textContent = nm||'匿名';
+  }
+  function openNickname() {
+    var ol=document.getElementById('nn-overlay');
+    var grid=document.getElementById('nn-emoji-grid');
+    var inp=document.getElementById('nn-input');
+    var curAv=getAvatar();
+    grid.innerHTML = ALL_AVATARS.map(function(em){
+      return '<button class="nn-emoji-opt'+(em===curAv?' sel':'')+'" onclick="selectAvatar(\''+em+'\',this)">'+em+'</button>';
+    }).join('');
+    inp.value = getNickname();
+    ol.classList.add('show');
+    setTimeout(function(){inp.focus();}, 350);
+  }
+  function closeNickname() { document.getElementById('nn-overlay').classList.remove('show'); }
+  function selectAvatar(em, btn) {
+    document.querySelectorAll('.nn-emoji-opt').forEach(function(b){b.classList.remove('sel');});
+    btn.classList.add('sel');
+  }
+  function saveNickname() {
+    var sel=document.querySelector('.nn-emoji-opt.sel');
+    var av=sel?sel.textContent:getAvatar();
+    var nm=document.getElementById('nn-input').value.trim();
+    localStorage.setItem('my_avatar',av);
+    if(nm) localStorage.setItem('my_nickname',nm);
+    else   localStorage.removeItem('my_nickname');
+    updateNicknameDisplay();
+    closeNickname();
+  }
+  document.getElementById('nn-overlay').addEventListener('click', function(e){
+    if(e.target===document.getElementById('nn-overlay')) closeNickname();
+  });
+  updateNicknameDisplay();
   </script>
 </body>
 </html>
