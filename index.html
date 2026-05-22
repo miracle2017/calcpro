@@ -69,8 +69,9 @@
     .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
     .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
     .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transform-origin: center center;
-      transition: color .3s, transform .55s cubic-bezier(.34,1.28,.64,1), filter .45s cubic-bezier(.34,1.56,.64,1), text-shadow .45s; }
-    .main-num.flipped { transform: rotate(180deg); }
+      transition: color .3s, transform .55s cubic-bezier(.34,1.28,.64,1), filter .5s cubic-bezier(.34,1.56,.64,1); }
+    .main-num.flipped   { transform: rotate(180deg); }
+    .main-num.blur-hide { filter: blur(8px); color: #ff9f0a; text-shadow: 0 0 28px rgba(255,159,10,.9), 0 0 56px rgba(255,159,10,.45); transition: none; }
     .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
       aspect-ratio: 1; border: none; border-radius: 50%;
@@ -565,34 +566,24 @@
     numEl.textContent = s; numEl.style.color = '';
   }
   var _flipGen = 0;
+  // Instantly hide result as blurred orange glow
   function flipResult(finalStr) {
     _flipGen++;
-    numEl.classList.remove('flipped');
-    // Disable transition so blur appears INSTANTLY (not animated in)
-    numEl.style.transition = 'none';
+    numEl.classList.remove('flipped', 'blur-hide');
     setDisplay(finalStr);
-    numEl.style.filter     = 'blur(9px)';
-    numEl.style.color      = 'var(--accent)';
-    numEl.style.textShadow = '0 0 32px rgba(255,159,10,.8), 0 0 60px rgba(255,159,10,.4)';
-    // Re-enable transition after one frame (so reveal animates out smoothly)
-    requestAnimationFrame(function() { numEl.style.transition = ''; });
+    // Force reflow so 'blur-hide' is not batched with the removal
+    void numEl.offsetWidth;
+    numEl.classList.add('blur-hide'); // transition:none on this class = instant blur
   }
+  // Spring-reveal then flip
   function revealAndFlip() {
-    // Transition is now active — blur clears with spring feel
-    numEl.style.filter     = 'blur(0px)';
-    numEl.style.color      = '';
-    numEl.style.textShadow = '';
-    // Pause so user sees the clear number, THEN flip
+    // Removing blur-hide re-enables the parent transition → spring reveal
+    numEl.classList.remove('blur-hide');
     setTimeout(function() { numEl.classList.add('flipped'); }, 440);
   }
   function unflipResult() {
     _flipGen++;
-    numEl.classList.remove('flipped');
-    numEl.style.transition = 'none';
-    numEl.style.filter     = '';
-    numEl.style.color      = '';
-    numEl.style.textShadow = '';
-    requestAnimationFrame(function() { numEl.style.transition = ''; });
+    numEl.classList.remove('flipped', 'blur-hide');
     setDisplay(cur);
   }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
