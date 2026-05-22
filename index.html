@@ -68,9 +68,9 @@
     }
     .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
     .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
-    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .25s, transform .55s cubic-bezier(.34,1.28,.64,1); transform-origin: center center; }
+    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transform-origin: center center;
+      transition: color .3s, transform .55s cubic-bezier(.34,1.28,.64,1), filter .45s cubic-bezier(.34,1.56,.64,1), text-shadow .45s; }
     .main-num.flipped { transform: rotate(180deg); }
-    .main-num.rolling { color: var(--accent); }
     .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
       aspect-ratio: 1; border: none; border-radius: 50%;
@@ -564,46 +564,30 @@
     if (s.length > 12) { var n=parseFloat(s); if(!isNaN(n)){s=n.toPrecision(8).replace(/\.?0+$/,''); if(s.length>12)s=n.toExponential(4);} }
     numEl.textContent = s; numEl.style.color = '';
   }
-  var _rollIv = null, _flipGen = 0;
-  function flipResult(finalStr, onDone, slow) {
-    if (_rollIv) { clearInterval(_rollIv); _rollIv = null; }
-    var myGen = ++_flipGen;
-    var chars = finalStr.split('');
-    var locked = [];
-    var ivMs   = slow ? 90  : 55;
-    var delay0 = slow ? 700 : 380;
-    var step   = slow ? 200 : 115;
-    var settle = slow ? 500 : 260;
-    numEl.classList.add('rolling');
-    numEl.textContent = chars.map(function(c){ return /\d/.test(c) ? Math.floor(Math.random()*10) : c; }).join('');
-    _rollIv = setInterval(function() {
-      if (myGen !== _flipGen) { clearInterval(_rollIv); return; }
-      numEl.textContent = chars.map(function(c, i) {
-        if (locked.indexOf(i) >= 0) return chars[i];
-        return /\d/.test(c) ? Math.floor(Math.random()*10) : c;
-      }).join('');
-    }, ivMs);
-    var digIdx = []; chars.forEach(function(c,i){ if(/\d/.test(c)) digIdx.push(i); });
-    digIdx.slice().reverse().forEach(function(idx, i) {
-      setTimeout(function() {
-        if (myGen !== _flipGen) return;
-        locked.push(idx);
-      }, delay0 + i * step);
-    });
-    var total = delay0 + digIdx.length * step + settle;
-    setTimeout(function() {
-      if (myGen !== _flipGen) return;
-      clearInterval(_rollIv); _rollIv = null;
-      numEl.textContent = finalStr;
-      numEl.classList.remove('rolling');
-      numEl.classList.add('flipped');
-      if (onDone) onDone();
-    }, total);
+  var _flipGen = 0;
+  // Show result blurred in accent orange — visible but unreadable
+  function flipResult(finalStr) {
+    _flipGen++;
+    numEl.classList.remove('flipped');
+    setDisplay(finalStr);
+    numEl.style.filter      = 'blur(9px)';
+    numEl.style.color       = 'var(--accent)';
+    numEl.style.textShadow  = '0 0 32px rgba(255,159,10,.8), 0 0 60px rgba(255,159,10,.4)';
+  }
+  // Spring-clear the blur, then flip after a breath
+  function revealAndFlip() {
+    numEl.style.filter     = 'blur(0px)';
+    numEl.style.color      = '';
+    numEl.style.textShadow = '';
+    // Brief pause so user sees the number, THEN flip
+    setTimeout(function() { numEl.classList.add('flipped'); }, 420);
   }
   function unflipResult() {
-    if (_rollIv) { clearInterval(_rollIv); _rollIv = null; }
     _flipGen++;
-    numEl.classList.remove('flipped', 'rolling');
+    numEl.classList.remove('flipped');
+    numEl.style.filter     = '';
+    numEl.style.color      = '';
+    numEl.style.textShadow = '';
     setDisplay(cur);
   }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
@@ -636,10 +620,8 @@
     var r=calc(a,b,op);
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
-    // hide result, show payment immediately
-    numEl.classList.remove('flipped','rolling');
-    numEl.textContent='████'; numEl.style.color='rgba(255,255,255,.18)';
-    showPayment(fullExpr);
+    flipResult(cur);        // show blurred in orange
+    showPayment(fullExpr);  // payment modal immediately
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
   }
   function onClear() {
@@ -728,9 +710,8 @@
   }
   document.getElementById('pay-cancel').addEventListener('click', function() {
     overlay.classList.remove('show');
-    // pause then slow slot-machine reveal → flipped
-    numEl.textContent='████'; numEl.style.color='rgba(255,255,255,.18)';
-    setTimeout(function() { flipResult(cur, null, true); }, 900);
+    // After modal closes, spring-reveal the blurred number then flip
+    setTimeout(function() { revealAndFlip(); }, 300);
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 查询 <span class="te">'+lastExpr+'</span>，看到¥1.99后，默默关掉了弹窗', true);
   });
   document.getElementById('pay-confirm').addEventListener('click', function() {
