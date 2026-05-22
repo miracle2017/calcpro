@@ -68,8 +68,9 @@
     }
     .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
     .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
-    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .2s, transform .5s cubic-bezier(.34,1.3,.64,1); transform-origin: center center; }
+    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .25s, transform .55s cubic-bezier(.34,1.28,.64,1); transform-origin: center center; }
     .main-num.flipped { transform: rotate(180deg); }
+    .main-num.rolling { color: var(--accent); }
     .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
       aspect-ratio: 1; border: none; border-radius: 50%;
@@ -563,8 +564,47 @@
     if (s.length > 12) { var n=parseFloat(s); if(!isNaN(n)){s=n.toPrecision(8).replace(/\.?0+$/,''); if(s.length>12)s=n.toExponential(4);} }
     numEl.textContent = s; numEl.style.color = '';
   }
-  function flipResult()   { setTimeout(function(){ numEl.classList.add('flipped'); }, 300); }
-  function unflipResult() { numEl.classList.remove('flipped'); }
+  var _rollIv = null, _flipGen = 0;
+  function flipResult(finalStr, onDone) {
+    if (_rollIv) { clearInterval(_rollIv); _rollIv = null; }
+    var myGen = ++_flipGen;
+    var chars = finalStr.split('');
+    var locked = [];
+    // rolling phase - show random digits, keep non-digits fixed
+    numEl.classList.add('rolling');
+    numEl.textContent = chars.map(function(c){ return /\d/.test(c) ? Math.floor(Math.random()*10) : c; }).join('');
+    _rollIv = setInterval(function() {
+      if (myGen !== _flipGen) { clearInterval(_rollIv); return; }
+      numEl.textContent = chars.map(function(c, i) {
+        if (locked.indexOf(i) >= 0) return chars[i];
+        return /\d/.test(c) ? Math.floor(Math.random()*10) : c;
+      }).join('');
+    }, 55);
+    // lock digits right-to-left, staggered
+    var digIdx = []; chars.forEach(function(c,i){ if(/\d/.test(c)) digIdx.push(i); });
+    digIdx.slice().reverse().forEach(function(idx, i) {
+      setTimeout(function() {
+        if (myGen !== _flipGen) return;
+        locked.push(idx);
+      }, 380 + i * 115);
+    });
+    // after all locked: clear rolling, flip
+    var total = 380 + digIdx.length * 115 + 260;
+    setTimeout(function() {
+      if (myGen !== _flipGen) return;
+      clearInterval(_rollIv); _rollIv = null;
+      numEl.textContent = finalStr;
+      numEl.classList.remove('rolling');
+      numEl.classList.add('flipped');
+      if (onDone) onDone();
+    }, total);
+  }
+  function unflipResult() {
+    if (_rollIv) { clearInterval(_rollIv); _rollIv = null; }
+    _flipGen++;
+    numEl.classList.remove('flipped', 'rolling');
+    setDisplay(cur);
+  }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
   function setLit(b)  { clearLit(); if(b){b.classList.add('lit'); litBtn=b;} }
   function calc(a,b,o) {
@@ -595,9 +635,7 @@
     var r=calc(a,b,op);
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
-    setDisplay(cur);
-    flipResult();
-    showPayment(fullExpr);
+    flipResult(cur, function(){ showPayment(fullExpr); });
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
   }
   function onClear() {
