@@ -565,29 +565,34 @@
     numEl.textContent = s; numEl.style.color = '';
   }
   var _flipGen = 0;
-  // Show result blurred in accent orange — visible but unreadable
   function flipResult(finalStr) {
     _flipGen++;
     numEl.classList.remove('flipped');
+    // Disable transition so blur appears INSTANTLY (not animated in)
+    numEl.style.transition = 'none';
     setDisplay(finalStr);
-    numEl.style.filter      = 'blur(9px)';
-    numEl.style.color       = 'var(--accent)';
-    numEl.style.textShadow  = '0 0 32px rgba(255,159,10,.8), 0 0 60px rgba(255,159,10,.4)';
+    numEl.style.filter     = 'blur(9px)';
+    numEl.style.color      = 'var(--accent)';
+    numEl.style.textShadow = '0 0 32px rgba(255,159,10,.8), 0 0 60px rgba(255,159,10,.4)';
+    // Re-enable transition after one frame (so reveal animates out smoothly)
+    requestAnimationFrame(function() { numEl.style.transition = ''; });
   }
-  // Spring-clear the blur, then flip after a breath
   function revealAndFlip() {
+    // Transition is now active — blur clears with spring feel
     numEl.style.filter     = 'blur(0px)';
     numEl.style.color      = '';
     numEl.style.textShadow = '';
-    // Brief pause so user sees the number, THEN flip
-    setTimeout(function() { numEl.classList.add('flipped'); }, 420);
+    // Pause so user sees the clear number, THEN flip
+    setTimeout(function() { numEl.classList.add('flipped'); }, 440);
   }
   function unflipResult() {
     _flipGen++;
     numEl.classList.remove('flipped');
+    numEl.style.transition = 'none';
     numEl.style.filter     = '';
     numEl.style.color      = '';
     numEl.style.textShadow = '';
+    requestAnimationFrame(function() { numEl.style.transition = ''; });
     setDisplay(cur);
   }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
@@ -718,7 +723,7 @@
     payQRSection.style.display='none';
     verifySpinner.classList.add('show');
     document.getElementById('pay-confirm').style.display='none';
-    var delay = 1800 + Math.random()*1400;
+    var delay = 600 + Math.random()*600;
     setTimeout(function() {
       verifySpinner.classList.remove('show');
       var msg = FUNNY[Math.floor(Math.random()*FUNNY.length)];
