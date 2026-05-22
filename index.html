@@ -565,12 +565,15 @@
     numEl.textContent = s; numEl.style.color = '';
   }
   var _rollIv = null, _flipGen = 0;
-  function flipResult(finalStr, onDone) {
+  function flipResult(finalStr, onDone, slow) {
     if (_rollIv) { clearInterval(_rollIv); _rollIv = null; }
     var myGen = ++_flipGen;
     var chars = finalStr.split('');
     var locked = [];
-    // rolling phase - show random digits, keep non-digits fixed
+    var ivMs   = slow ? 90  : 55;
+    var delay0 = slow ? 700 : 380;
+    var step   = slow ? 200 : 115;
+    var settle = slow ? 500 : 260;
     numEl.classList.add('rolling');
     numEl.textContent = chars.map(function(c){ return /\d/.test(c) ? Math.floor(Math.random()*10) : c; }).join('');
     _rollIv = setInterval(function() {
@@ -579,17 +582,15 @@
         if (locked.indexOf(i) >= 0) return chars[i];
         return /\d/.test(c) ? Math.floor(Math.random()*10) : c;
       }).join('');
-    }, 55);
-    // lock digits right-to-left, staggered
+    }, ivMs);
     var digIdx = []; chars.forEach(function(c,i){ if(/\d/.test(c)) digIdx.push(i); });
     digIdx.slice().reverse().forEach(function(idx, i) {
       setTimeout(function() {
         if (myGen !== _flipGen) return;
         locked.push(idx);
-      }, 380 + i * 115);
+      }, delay0 + i * step);
     });
-    // after all locked: clear rolling, flip
-    var total = 380 + digIdx.length * 115 + 260;
+    var total = delay0 + digIdx.length * step + settle;
     setTimeout(function() {
       if (myGen !== _flipGen) return;
       clearInterval(_rollIv); _rollIv = null;
@@ -635,7 +636,10 @@
     var r=calc(a,b,op);
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
-    flipResult(cur, function(){ showPayment(fullExpr); });
+    // hide result, show payment immediately
+    numEl.classList.remove('flipped','rolling');
+    numEl.textContent='████'; numEl.style.color='rgba(255,255,255,.18)';
+    showPayment(fullExpr);
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
   }
   function onClear() {
@@ -724,8 +728,9 @@
   }
   document.getElementById('pay-cancel').addEventListener('click', function() {
     overlay.classList.remove('show');
-    numEl.textContent='？？？'; numEl.style.color='#ff453a';
-    setTimeout(function(){ setDisplay(cur); }, 1600);
+    // pause then slow slot-machine reveal → flipped
+    numEl.textContent='████'; numEl.style.color='rgba(255,255,255,.18)';
+    setTimeout(function() { flipResult(cur, null, true); }, 900);
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 查询 <span class="te">'+lastExpr+'</span>，看到¥1.99后，默默关掉了弹窗', true);
   });
   document.getElementById('pay-confirm').addEventListener('click', function() {
