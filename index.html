@@ -233,47 +233,51 @@
 
     /* ── Payment Overlay ── */
     .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.55);
-      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      position: fixed; inset: 0; background: rgba(0,0,0,.52);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       display: flex; align-items: center; justify-content: center;
       z-index: 200; opacity: 0; pointer-events: none; transition: opacity .28s;
     }
     .overlay.show { opacity: 1; pointer-events: all; }
     .pay-card {
-      background: rgba(30,30,33,.96); border: 1px solid rgba(255,255,255,.08); border-radius: 20px;
-      width: min(268px,82vw); overflow: hidden;
-      transform: scale(.9) translateY(16px); transition: transform .3s cubic-bezier(.34,1.46,.64,1);
-      box-shadow: 0 16px 48px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
+      background: rgba(28,28,31,.97); border: 1px solid rgba(255,255,255,.09); border-radius: 22px;
+      width: min(260px,82vw); overflow: hidden;
+      transform: scale(.9) translateY(16px); transition: transform .32s cubic-bezier(.34,1.46,.64,1);
+      box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
     }
     .overlay.show .pay-card { transform: scale(1) translateY(0); }
-    .pay-header { padding: 14px 16px 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
-    .pay-to   { font-size: 10px; color: rgba(255,255,255,.35); margin-bottom: 1px; }
-    .pay-merchant { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
-    .pay-amount-row { padding: 10px 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
-    .pay-amount-label { font-size: 10px; color: rgba(255,255,255,.3); margin-bottom: 2px; }
-    .pay-amount { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -1px; }
-    .pay-amount span { font-size: 17px; font-weight: 500; }
-    .pay-qr-section { padding: 12px 16px 8px; display: flex; flex-direction: column; align-items: center; }
-    .pay-expr { font-size: 11px; color: rgba(255,255,255,.3); background: rgba(255,255,255,.05); border-radius: 6px; padding: 4px 10px; margin-bottom: 10px; font-family: monospace; word-break: break-all; text-align: center; max-width: 100%; }
-    #qr-canvas-wrap { padding: 8px; background: #fff; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
-    .pay-hint { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 500; margin-bottom: 2px; }
-    .pay-sub  { font-size: 9.5px; color: rgba(255,255,255,.22); text-align: center; line-height: 1.5; margin-bottom: 10px; }
+    .pay-header { padding: 12px 16px 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .pay-to   { font-size: 9.5px; color: rgba(255,255,255,.3); margin-bottom: 1px; }
+    .pay-merchant { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.88); }
+    .pay-amount-row {
+      padding: 8px 16px 7px; text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display: flex; align-items: baseline; justify-content: center; gap: 4px;
+    }
+    .pay-amount-label { font-size: 9.5px; color: rgba(255,255,255,.28); }
+    .pay-amount { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+    .pay-amount span { font-size: 15px; font-weight: 500; margin-right: 1px; }
+    .pay-qr-section { padding: 10px 14px 6px; display: flex; flex-direction: column; align-items: center; }
+    .pay-expr { font-size: 10.5px; color: rgba(255,255,255,.28); background: rgba(255,255,255,.05); border-radius: 6px; padding: 3px 9px; margin-bottom: 8px; font-family: monospace; word-break: break-all; text-align: center; max-width: 100%; }
+    #qr-canvas-wrap { padding: 7px; background: #fff; border-radius: 9px; display: inline-block; margin-bottom: 6px; }
+    .pay-hint { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 500; margin-bottom: 1px; }
+    .pay-sub  { font-size: 9px; color: rgba(255,255,255,.2); text-align: center; line-height: 1.5; margin-bottom: 8px; }
     .pay-actions { display: flex; border-top: 1px solid rgba(255,255,255,.07); }
-    .pay-btn { flex:1; padding:12px; border:none; background:transparent; font-family:var(--font); font-size:13px; cursor:pointer; transition:background .15s; color:rgba(255,255,255,.45); }
+    .pay-btn { flex:1; padding:11px; border:none; background:transparent; font-family:var(--font); font-size:13px; cursor:pointer; transition:background .15s; color:rgba(255,255,255,.45); }
     .pay-btn:hover { background: rgba(255,255,255,.05); }
     .pay-btn.cancel  { border-right: 1px solid rgba(255,255,255,.07); }
     .pay-btn.confirm { color: rgba(100,210,255,.85); font-weight: 600; }
     /* Funny message */
-    .funny-msg { padding: 14px 16px 10px; text-align: center; display: none; }
+    .funny-msg { padding: 12px 14px 8px; text-align: center; display: none; }
     .funny-msg.show { display: block; }
-    .funny-icon  { font-size: 36px; margin-bottom: 8px; display: block; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
-    .funny-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 4px; }
-    .funny-desc  { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.5; }
+    .funny-icon  { font-size: 34px; margin-bottom: 6px; display: block; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+    .funny-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 4px; }
+    .funny-desc  { font-size: 11px; color: rgba(255,255,255,.4); line-height: 1.5; }
     @keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
     /* Spinner */
-    .verify-spinner { padding: 18px 16px; text-align: center; display: none; }
+    .verify-spinner { padding: 16px; text-align: center; display: none; }
     .verify-spinner.show { display: block; }
-    .spinner-ring { width:28px; height:28px; border:3px solid rgba(255,255,255,.1); border-top-color:rgba(100,210,255,.7); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 8px; }
+    .spinner-ring { width:26px; height:26px; border:3px solid rgba(255,255,255,.1); border-top-color:rgba(100,210,255,.7); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 7px; }
     @keyframes spin { to{transform:rotate(360deg)} }
     .verify-text { font-size: 11px; color: rgba(255,255,255,.4); }
 
@@ -639,18 +643,18 @@
   // 3. PAYMENT OVERLAY + FUNNY MESSAGES
   // ═══════════════════════════════════════
   var FUNNY = [
-    {icon:'🎉', title:'核验完成！', desc:'¥1.99 已在路上了，就是方向暂时不太对，稍等'},
-    {icon:'🔮', title:'答案已写入命运之书', desc:'下辈子转世时系统会自动推送给您，请耐心等待'},
-    {icon:'📦', title:'计算结果快递途中', desc:'预计 3-5 个工作日送达，请在家等候签收'},
-    {icon:'🌟', title:'感谢您的信任与耐心', desc:'我们把这份感动存入了数据库（但结果不会）'},
-    {icon:'☕', title:'结果正在精心准备中', desc:'就像泡一壶好茶，慢慢来，急不得的'},
-    {icon:'🏅', title:'诚信用户认证通过', desc:'系统相信您真的付了，只是钱暂时迷路了'},
-    {icon:'🌈', title:'今日勇气挑战完成！', desc:'您已超越 99% 的计算器用户，明天继续加油'},
-    {icon:'🎭', title:'核验通过了！', desc:'结果嘛……系统这边也不是很清楚，大家一起等'},
-    {icon:'💌', title:'结果已安全加密保存', desc:'密钥由付款记录解锁，而付款记录显示……嗯'},
-    {icon:'🎪', title:'今日最勇挑战者', desc:'您的勇气已经让整个服务器都深受感动'},
-    {icon:'🧠', title:'聪明人出没', desc:'¥1.99 没花出去，脑子动了动，也挺好的'},
-    {icon:'🦅', title:'薅羊毛成就达成', desc:'系统已备案，下次见到您会格外亲切地打招呼'},
+    {icon:'🎰', title:'核验通过！结果是——', desc:'对不起，系统在就快完成的时候小逃了。它也浪费了您的时间'},
+    {icon:'🧠', title:'您的付款记录已找到', desc:'记录显示：您盯着¥1.99看了3.7秒，最终选择用【暂不查看】保全身而退'},
+    {icon:'🎨', title:'结果已就位，正在载入…', desc:'载入进度：0% —— 局域网已断开。局域网：我没断啊，是您的心断了'},
+    {icon:'📊', title:'深度分析您的付款行为完毕', desc:'结论：您的付款成功率和中彩票概率高度相关，下次不如试试'},
+    {icon:'🎪', title:'核验系统崩溃了', desc:'就在处理您付款记录的那一刻，纯属巧合，让专业的来'},
+    {icon:'🔮', title:'结果就在您心里', desc:'¥1.99也在您口袋里，两者都待在原地，相安无事，缘分到了'},
+    {icon:'🏆', title:'恭喜获得「年度最诚信用户」提名', desc:'投票通道已关闭，但您参与了，这很重要。系统不会忽视这一点'},
+    {icon:'🚚', title:'结果正在快递途中', desc:'下单付款时间：就尧了，已载到附近驿站，驿站在太平洋中心，预计3-5个工作日'},
+    {icon:'🤝', title:'您和¥1.99的缘分', desc:'止步于扫码界面，两者都认为对方要让步，局面僵了'},
+    {icon:'🌚', title:'结果已安全加密保存', desc:'解密密钚：永不公开——主要是我们也忘了密钚在哪，大家一起庅了吧'},
+    {icon:'👁️', title:'笱羊毛官方认证', desc:'此证书届时未执行付款操作，系统已备案，等您下次再来'},
+    {icon:'🧨', title:'经过精密运算', desc:'您的付款记录存在哲学上的不确定性，系统选择尊重，不作判断'},
   ];
 
   var overlay      = document.getElementById('overlay');
@@ -846,14 +850,14 @@
   function rnet()      { return ['4G','5G','WiFi'][~~(Math.random()*3)]; }
 
   var FAKE_T = [
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>·<span class="tl2">'+pv+'</span>·'+net+' '+t+'查 <span class="te">'+e+'</span>'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> <span class="tn">'+n+'</span> 算完关掉了弹窗'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>·'+isp+' 算 <span class="te">'+e+'</span> 拒绝付款'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>·<span class="tl2">'+pv+'</span> 试图免费看结果，失败'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> '+dv+' 声称已付款 🤨'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> 查 <span class="te">'+e+'</span>，弹窗0.3秒后关闭'; },
-    function(n,e,t,pv,isp,dv,net){ return dv+'·<span class="tl2">'+pv+'</span> 算了结果不给看'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>·'+isp+' '+t+' 查 <span class="te">'+e+'</span>'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'查 <span class="te">'+e+'</span>，默默关掉了'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 声称已付款 🤨 系统存疑'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 查 <span class="te">'+e+'</span>，这次真的会付（上次也这么说）'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'在弹窗停留0.8秒，破本周最短纪录'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 把¥1.99投进了存钱罐，说下次再用'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 查 <span class="te">'+e+'</span>，结果见了也没带走'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 试图用道德说服系统免费给答案，失败'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'查 <span class="te">'+e+'</span>，表示回去凑钱'; },
   ];
 
   var tickerData = [];
