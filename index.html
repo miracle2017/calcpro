@@ -68,7 +68,8 @@
     }
     .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
     .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
-    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .2s; }
+    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .2s, transform .5s cubic-bezier(.34,1.3,.64,1); transform-origin: center center; }
+    .main-num.flipped { transform: rotate(180deg); }
     .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
       aspect-ratio: 1; border: none; border-radius: 50%;
@@ -558,6 +559,8 @@
     if (s.length > 12) { var n=parseFloat(s); if(!isNaN(n)){s=n.toPrecision(8).replace(/\.?0+$/,''); if(s.length>12)s=n.toExponential(4);} }
     numEl.textContent = s; numEl.style.color = '';
   }
+  function flipResult()   { setTimeout(function(){ numEl.classList.add('flipped'); }, 300); }
+  function unflipResult() { numEl.classList.remove('flipped'); }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
   function setLit(b)  { clearLit(); if(b){b.classList.add('lit'); litBtn=b;} }
   function calc(a,b,o) {
@@ -565,7 +568,7 @@
     if(o==='÷') return b!==0?a/b:'Error'; return b;
   }
   function onDigit(d) {
-    if(justCalc){cur=d;exprEl.textContent='';justCalc=false;clearLit();}
+    if(justCalc){cur=d;exprEl.textContent='';justCalc=false;clearLit();unflipResult();}
     else if(waitOp){cur=d;waitOp=false;}
     else{cur=cur==='0'?d:cur+d; if(cur.length>15)return;}
     setDisplay(cur); document.getElementById('btn-ac').textContent='C';
@@ -588,12 +591,14 @@
     var r=calc(a,b,op);
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
+    setDisplay(cur);
+    flipResult();
     showPayment(fullExpr);
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
   }
   function onClear() {
     cur='0';prev='';op=null;waitOp=false;justCalc=false;
-    exprEl.textContent='';setDisplay('0');clearLit();
+    exprEl.textContent='';setDisplay('0');clearLit();unflipResult();
     document.getElementById('btn-ac').textContent='AC';
   }
   function onSign() { if(cur==='0'||cur==='Error')return; cur=cur.startsWith('-')?cur.slice(1):'-'+cur; setDisplay(cur); }
