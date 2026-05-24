@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>计算云™ - 专业计算结果查询平台</title>
-  <meta name="description" content="全球领先的专业计算结果查询平台，已帮助数千名用户获取精准计算结果。" />
+  <title>璁＄畻浜戔劉 - 涓撲笟璁＄畻缁撴灉鏌ヨ骞冲彴</title>
+  <meta name="description" content="鍏ㄧ悆棰嗗厛鐨勪笓涓氳绠楃粨鏋滄煡璇㈠钩鍙帮紝宸插府鍔╂暟鍗冨悕鐢ㄦ埛鑾峰彇绮惧噯璁＄畻缁撴灉銆? />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
@@ -28,7 +28,7 @@
       padding: 18px 0 calc(var(--ticker-h) + 10px) 0; overflow-x: hidden;
     }
 
-    /* ── Header ── */
+    /* 鈹€鈹€ Header 鈹€鈹€ */
     .header { width: min(390px,100vw); padding: 0 20px 14px; user-select: none; }
     .brand-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
     .brand-name { font-family: var(--serif); font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 1px; }
@@ -60,7 +60,7 @@
     .stats-unit { font-size: 11px; color: var(--dim); }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-    /* ── Calculator ── */
+    /* 鈹€鈹€ Calculator 鈹€鈹€ */
     .calc-shell {
       width: min(390px,100vw); background: var(--bg-calc); border-radius: 44px;
       box-shadow: 0 40px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04);
@@ -68,8 +68,7 @@
     }
     .display { min-height: 120px; padding: 10px 22px 18px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; gap: 2px; }
     .expr { font-size: 16px; color: var(--dim); font-weight: 300; min-height: 22px; text-align: right; word-break: break-all; }
-    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transform-origin: center center;
-      transition: color .25s, transform .55s cubic-bezier(.34,1.28,.64,1); }
+    .main-num { font-size: clamp(44px,11vw,64px); font-weight: 300; line-height: 1.05; text-align: right; word-break: break-all; letter-spacing: -2px; transition: color .2s, transform .5s cubic-bezier(.34,1.3,.64,1); transform-origin: center center; }
     .main-num.flipped { transform: rotate(180deg); }
     .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 11px; padding: 0 6px; }
     .btn {
@@ -89,7 +88,7 @@
     .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,.22); transform:scale(0); animation:rpl .42s linear; pointer-events:none; }
     @keyframes rpl { to { transform:scale(2.6); opacity:0; } }
 
-    /* ── Bottom action bar ── */
+    /* 鈹€鈹€ Bottom action bar 鈹€鈹€ */
     .action-bar {
       width: min(390px,100vw); margin-top: 12px;
       display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -113,10 +112,10 @@
     .nn-nm  { max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .nn-edit { font-size: 9px; color: rgba(255,255,255,.25); }
 
-    /* ── Footer ── */
+    /* 鈹€鈹€ Footer 鈹€鈹€ */
     .footer-tag { margin-top: 10px; margin-bottom: 4px; font-size: 9px; color: rgba(255,255,255,.12); text-align: center; letter-spacing: .3px; user-select: none; width: min(390px,100vw); padding: 0 20px; }
 
-    /* ── Ticker ── */
+    /* 鈹€鈹€ Ticker 鈹€鈹€ */
     .ticker {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--ticker-h);
       background: rgba(12,12,14,.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -139,9 +138,9 @@
     .ti .tl2 { color: rgba(100,210,255,.6); }
     .ti.real { color: rgba(255,255,255,.6); }
     .ti.real .tn { color: #64d2ff; }
-    .ti.real::before { content: '📍 '; }
+    .ti.real::before { content: '馃搷 '; }
 
-    /* ── Comment Panel ── */
+    /* 鈹€鈹€ Comment Panel 鈹€鈹€ */
     .comment-panel { position: fixed; inset: 0; z-index: 150; opacity: 0; pointer-events: none; transition: opacity .3s; }
     .comment-panel.show { opacity: 1; pointer-events: all; }
     .comment-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
@@ -199,7 +198,7 @@
     .main-comment-input::placeholder { color: rgba(255,255,255,.25); }
     .main-send-btn { background: var(--accent); border: none; border-radius: 12px; padding: 9px 14px; color: #000; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font); flex-shrink: 0; }
 
-    /* ── Nickname Modal ── */
+    /* 鈹€鈹€ Nickname Modal 鈹€鈹€ */
     .nn-overlay {
       position: fixed; inset: 0; z-index: 300;
       display: flex; align-items: center; justify-content: center;
@@ -232,53 +231,49 @@
     .nn-save { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: 12px; color: #000; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font); }
     .nn-hint { font-size: 10px; color: rgba(255,255,255,.2); text-align: center; margin-top: 8px; }
 
-    /* ── Payment Overlay ── */
+    /* 鈹€鈹€ Payment Overlay 鈹€鈹€ */
     .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.52);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      position: fixed; inset: 0; background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center;
       z-index: 200; opacity: 0; pointer-events: none; transition: opacity .28s;
     }
     .overlay.show { opacity: 1; pointer-events: all; }
     .pay-card {
-      background: rgba(28,28,31,.97); border: 1px solid rgba(255,255,255,.09); border-radius: 22px;
-      width: min(260px,82vw); overflow: hidden;
-      transform: scale(.9) translateY(16px); transition: transform .32s cubic-bezier(.34,1.46,.64,1);
-      box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+      background: rgba(30,30,33,.96); border: 1px solid rgba(255,255,255,.08); border-radius: 20px;
+      width: min(268px,82vw); overflow: hidden;
+      transform: scale(.9) translateY(16px); transition: transform .3s cubic-bezier(.34,1.46,.64,1);
+      box-shadow: 0 16px 48px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
     }
     .overlay.show .pay-card { transform: scale(1) translateY(0); }
-    .pay-header { padding: 12px 16px 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
-    .pay-to   { font-size: 9.5px; color: rgba(255,255,255,.3); margin-bottom: 1px; }
-    .pay-merchant { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.88); }
-    .pay-amount-row {
-      padding: 8px 16px 7px; text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,.07);
-      display: flex; align-items: baseline; justify-content: center; gap: 4px;
-    }
-    .pay-amount-label { font-size: 9.5px; color: rgba(255,255,255,.28); }
-    .pay-amount { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -1px; }
-    .pay-amount span { font-size: 15px; font-weight: 500; margin-right: 1px; }
-    .pay-qr-section { padding: 10px 14px 6px; display: flex; flex-direction: column; align-items: center; }
-    .pay-expr { font-size: 10.5px; color: rgba(255,255,255,.28); background: rgba(255,255,255,.05); border-radius: 6px; padding: 3px 9px; margin-bottom: 8px; font-family: monospace; word-break: break-all; text-align: center; max-width: 100%; }
-    #qr-canvas-wrap { padding: 7px; background: #fff; border-radius: 9px; display: inline-block; margin-bottom: 6px; }
-    .pay-hint { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 500; margin-bottom: 1px; }
-    .pay-sub  { font-size: 9px; color: rgba(255,255,255,.2); text-align: center; line-height: 1.5; margin-bottom: 8px; }
+    .pay-header { padding: 14px 16px 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .pay-to   { font-size: 10px; color: rgba(255,255,255,.35); margin-bottom: 1px; }
+    .pay-merchant { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9); }
+    .pay-amount-row { padding: 10px 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .pay-amount-label { font-size: 10px; color: rgba(255,255,255,.3); margin-bottom: 2px; }
+    .pay-amount { font-size: 30px; font-weight: 700; color: #fff; letter-spacing: -1px; }
+    .pay-amount span { font-size: 17px; font-weight: 500; }
+    .pay-qr-section { padding: 12px 16px 8px; display: flex; flex-direction: column; align-items: center; }
+    .pay-expr { font-size: 11px; color: rgba(255,255,255,.3); background: rgba(255,255,255,.05); border-radius: 6px; padding: 4px 10px; margin-bottom: 10px; font-family: monospace; word-break: break-all; text-align: center; max-width: 100%; }
+    #qr-canvas-wrap { padding: 8px; background: #fff; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+    .pay-hint { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 500; margin-bottom: 2px; }
+    .pay-sub  { font-size: 9.5px; color: rgba(255,255,255,.22); text-align: center; line-height: 1.5; margin-bottom: 10px; }
     .pay-actions { display: flex; border-top: 1px solid rgba(255,255,255,.07); }
-    .pay-btn { flex:1; padding:11px; border:none; background:transparent; font-family:var(--font); font-size:13px; cursor:pointer; transition:background .15s; color:rgba(255,255,255,.45); }
+    .pay-btn { flex:1; padding:12px; border:none; background:transparent; font-family:var(--font); font-size:13px; cursor:pointer; transition:background .15s; color:rgba(255,255,255,.45); }
     .pay-btn:hover { background: rgba(255,255,255,.05); }
     .pay-btn.cancel  { border-right: 1px solid rgba(255,255,255,.07); }
     .pay-btn.confirm { color: rgba(100,210,255,.85); font-weight: 600; }
     /* Funny message */
-    .funny-msg { padding: 12px 14px 8px; text-align: center; display: none; }
+    .funny-msg { padding: 14px 16px 10px; text-align: center; display: none; }
     .funny-msg.show { display: block; }
-    .funny-icon  { font-size: 34px; margin-bottom: 6px; display: block; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
-    .funny-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 4px; }
-    .funny-desc  { font-size: 11px; color: rgba(255,255,255,.4); line-height: 1.5; }
+    .funny-icon  { font-size: 36px; margin-bottom: 8px; display: block; animation: pop .4s cubic-bezier(.34,1.56,.64,1); }
+    .funny-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 4px; }
+    .funny-desc  { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.5; }
     @keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
     /* Spinner */
-    .verify-spinner { padding: 16px; text-align: center; display: none; }
+    .verify-spinner { padding: 18px 16px; text-align: center; display: none; }
     .verify-spinner.show { display: block; }
-    .spinner-ring { width:26px; height:26px; border:3px solid rgba(255,255,255,.1); border-top-color:rgba(100,210,255,.7); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 7px; }
+    .spinner-ring { width:28px; height:28px; border:3px solid rgba(255,255,255,.1); border-top-color:rgba(100,210,255,.7); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 8px; }
     @keyframes spin { to{transform:rotate(360deg)} }
     .verify-text { font-size: 11px; color: rgba(255,255,255,.4); }
 
@@ -291,16 +286,16 @@
   <!-- Header -->
   <div class="header">
     <div class="brand-row">
-      <span class="brand-name">计算云</span>
-      <span class="brand-tm">™ · Professional</span>
+      <span class="brand-name">璁＄畻浜?/span>
+      <span class="brand-tm">鈩?路 Professional</span>
     </div>
     <div class="brand-line"></div>
     <div class="stats-bar">
       <div class="stats-dot"></div>
-      <span class="stats-label">已服务</span>
+      <span class="stats-label">宸叉湇鍔?/span>
       <div class="stats-counter-wrap">
         <span class="stats-num" id="stats-num"></span>
-        <span class="stats-unit">位用户完成精准计算</span>
+        <span class="stats-unit">浣嶇敤鎴峰畬鎴愮簿鍑嗚绠?/span>
       </div>
     </div>
   </div>
@@ -313,17 +308,17 @@
     </div>
     <div class="btn-grid">
       <button class="btn fn" data-a="clear" id="btn-ac">AC</button>
-      <button class="btn fn" data-a="sign">+/−</button>
+      <button class="btn fn" data-a="sign">+/鈭?/button>
       <button class="btn fn" data-a="pct">%</button>
-      <button class="btn op" data-a="op" data-op="÷">÷</button>
+      <button class="btn op" data-a="op" data-op="梅">梅</button>
       <button class="btn n" data-a="d" data-d="7">7</button>
       <button class="btn n" data-a="d" data-d="8">8</button>
       <button class="btn n" data-a="d" data-d="9">9</button>
-      <button class="btn op" data-a="op" data-op="×">×</button>
+      <button class="btn op" data-a="op" data-op="脳">脳</button>
       <button class="btn n" data-a="d" data-d="4">4</button>
       <button class="btn n" data-a="d" data-d="5">5</button>
       <button class="btn n" data-a="d" data-d="6">6</button>
-      <button class="btn op" data-a="op" data-op="−">−</button>
+      <button class="btn op" data-a="op" data-op="鈭?>鈭?/button>
       <button class="btn n" data-a="d" data-d="1">1</button>
       <button class="btn n" data-a="d" data-d="2">2</button>
       <button class="btn n" data-a="d" data-d="3">3</button>
@@ -337,24 +332,24 @@
   <!-- Action Bar: Comments + Nickname -->
   <div class="action-bar">
     <button class="comment-toggle-btn" onclick="openComments()">
-      💬 神评论区
+      馃挰 绁炶瘎璁哄尯
       <span class="count-badge" id="comment-count">0</span>
     </button>
     <button class="nickname-btn" onclick="openNickname()">
-      <span class="nn-av" id="my-av-disp">🎭</span>
-      <span class="nn-nm" id="my-nm-disp">匿名</span>
-      <span class="nn-edit">✏ 设置</span>
+      <span class="nn-av" id="my-av-disp">馃幁</span>
+      <span class="nn-nm" id="my-nm-disp">鍖垮悕</span>
+      <span class="nn-edit">鉁?璁剧疆</span>
     </button>
   </div>
 
-  <div class="footer-tag">© 2026 计算云™ · 闽ICP备2024114514号-1 · 计算结果受专利保护 · 全球服务节点 128 个</div>
+  <div class="footer-tag">漏 2026 璁＄畻浜戔劉 路 闂絀CP澶?024114514鍙?1 路 璁＄畻缁撴灉鍙椾笓鍒╀繚鎶?路 鍏ㄧ悆鏈嶅姟鑺傜偣 128 涓?/div>
 
   <!-- Ticker -->
   <div class="ticker">
     <div class="ticker-inner">
       <div class="ticker-head">
         <div class="td"></div>
-        <div class="tl">实时服务记录</div>
+        <div class="tl">瀹炴椂鏈嶅姟璁板綍</div>
       </div>
       <div class="ticker-scroll-wrap">
         <div class="ticker-track" id="ticker-track"></div>
@@ -368,13 +363,13 @@
     <div class="comment-sheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <span class="sheet-title">💬 神评论区 <span id="sheet-count" style="font-weight:400;color:rgba(255,255,255,.4);font-size:12px;"></span></span>
-        <button class="sheet-close" onclick="closeComments()">×</button>
+        <span class="sheet-title">馃挰 绁炶瘎璁哄尯 <span id="sheet-count" style="font-weight:400;color:rgba(255,255,255,.4);font-size:12px;"></span></span>
+        <button class="sheet-close" onclick="closeComments()">脳</button>
       </div>
       <div class="comment-list" id="comment-list"></div>
       <div class="comment-input-bar">
-        <textarea class="main-comment-input" id="main-input" placeholder="说点什么…（匿名发布，随便说）" rows="1"></textarea>
-        <button class="main-send-btn" onclick="submitComment()">发送</button>
+        <textarea class="main-comment-input" id="main-input" placeholder="璇寸偣浠€涔堚€︼紙鍖垮悕鍙戝竷锛岄殢渚胯锛? rows="1"></textarea>
+        <button class="main-send-btn" onclick="submitComment()">鍙戦€?/button>
       </div>
     </div>
   </div>
@@ -382,11 +377,11 @@
   <!-- Nickname Modal -->
   <div class="nn-overlay" id="nn-overlay">
     <div class="nn-card">
-      <div class="nn-title">设置你的身份</div>
+      <div class="nn-title">璁剧疆浣犵殑韬唤</div>
       <div class="nn-emoji-grid" id="nn-emoji-grid"></div>
-      <input class="nn-input" id="nn-input" placeholder="你的昵称（留空则匿名）" maxlength="12" />
-      <button class="nn-save" onclick="saveNickname()">保存</button>
-      <div class="nn-hint">昵称和头像会在评论区显示 · 随时可改</div>
+      <input class="nn-input" id="nn-input" placeholder="浣犵殑鏄电О锛堢暀绌哄垯鍖垮悕锛? maxlength="12" />
+      <button class="nn-save" onclick="saveNickname()">淇濆瓨</button>
+      <div class="nn-hint">鏄电О鍜屽ご鍍忎細鍦ㄨ瘎璁哄尯鏄剧ず 路 闅忔椂鍙敼</div>
     </div>
   </div>
 
@@ -394,22 +389,22 @@
   <div class="overlay" id="overlay">
     <div class="pay-card">
       <div class="pay-header">
-        <div class="pay-to">向</div>
-        <div class="pay-merchant">计算云™ 结果查询服务</div>
+        <div class="pay-to">鍚?/div>
+        <div class="pay-merchant">璁＄畻浜戔劉 缁撴灉鏌ヨ鏈嶅姟</div>
       </div>
       <div class="pay-amount-row">
-        <div class="pay-amount-label">付款金额</div>
-        <div class="pay-amount"><span>¥</span>1.99</div>
+        <div class="pay-amount-label">浠樻閲戦</div>
+        <div class="pay-amount"><span>楼</span>1.99</div>
       </div>
       <div class="pay-qr-section" id="pay-qr-section">
         <div class="pay-expr" id="pay-expr"></div>
         <div id="qr-canvas-wrap"><div id="qr-target"></div></div>
-        <div class="pay-hint">📱 扫码完成付款，自动显示结果</div>
-        <div class="pay-sub">支持微信 / 支付宝 · 实时到账</div>
+        <div class="pay-hint">馃摫 鎵爜瀹屾垚浠樻锛岃嚜鍔ㄦ樉绀虹粨鏋?/div>
+        <div class="pay-sub">鏀寔寰俊 / 鏀粯瀹?路 瀹炴椂鍒拌处</div>
       </div>
       <div class="verify-spinner" id="verify-spinner">
         <div class="spinner-ring"></div>
-        <div class="verify-text">正在核验付款记录…</div>
+        <div class="verify-text">姝ｅ湪鏍搁獙浠樻璁板綍鈥?/div>
       </div>
       <div class="funny-msg" id="funny-msg">
         <span class="funny-icon"  id="funny-icon"></span>
@@ -417,25 +412,23 @@
         <div class="funny-desc"   id="funny-desc"></div>
       </div>
       <div class="pay-actions">
-        <button class="pay-btn cancel"  id="pay-cancel">暂不查看</button>
-        <button class="pay-btn confirm" id="pay-confirm">已完成付款</button>
+        <button class="pay-btn cancel"  id="pay-cancel">鏆備笉鏌ョ湅</button>
+        <button class="pay-btn confirm" id="pay-confirm">宸插畬鎴愪粯娆?/button>
       </div>
     </div>
   </div>
 
   <script>
-  // ═══════════════════════════════════════
-  // 0. USER DEVICE INFO + IP GEOLOCATION
-  // ═══════════════════════════════════════
-  var UserInfo = (function() {
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 0. USER DEVICE INFO + IP GEOLOCATION
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var UserInfo = (function() {
     var ua = navigator.userAgent;
-    var device = '某神秘设备', browser = '某浏览器', network = '';
+    var device = '鏌愮绉樿澶?, browser = '鏌愭祻瑙堝櫒', network = '';
 
-    if      (/iPhone/.test(ua))    { var v=ua.match(/iPhone OS (\d+)/);  device='iPhone · iOS'+(v?' '+v[1]:''); }
+    if      (/iPhone/.test(ua))    { var v=ua.match(/iPhone OS (\d+)/);  device='iPhone 路 iOS'+(v?' '+v[1]:''); }
     else if (/iPad/.test(ua))       { device='iPad'; }
-    else if (/Android/.test(ua))   { var v=ua.match(/Android (\d+)/), m=ua.match(/;\s*([A-Za-z0-9 _\-]+)\sBuild/); device=(m&&m[1].trim().length<22)?m[1].trim():'Android '+(v?v[1]:'')+'手机'; }
+    else if (/Android/.test(ua))   { var v=ua.match(/Android (\d+)/), m=ua.match(/;\s*([A-Za-z0-9 _\-]+)\sBuild/); device=(m&&m[1].trim().length<22)?m[1].trim():'Android '+(v?v[1]:'')+'鎵嬫満'; }
     else if (/Macintosh/.test(ua)) { device='MacBook'; }
-    else if (/Windows/.test(ua))   { device='Windows电脑'; }
+    else if (/Windows/.test(ua))   { device='Windows鐢佃剳'; }
 
     if      (/CriOS/.test(ua))      browser='Chrome';
     else if (/Edg\//.test(ua))      browser='Edge';
@@ -453,16 +446,16 @@
     }
 
     return { device:device, browser:browser, network:network,
-             screen:screen.width+'×'+screen.height,
+             screen:screen.width+'脳'+screen.height,
              province:'', city:'', isp:'', ip:'' };
   })();
 
   function normalizeISP(isp) {
     if (!isp) return '';
-    if (/Mobile|移动/.test(isp))  return '中国移动';
-    if (/Telecom|电信/.test(isp)) return '中国电信';
-    if (/Unicom|联通/.test(isp))  return '中国联通';
-    if (/Broadband/.test(isp))    return '宽带';
+    if (/Mobile|绉诲姩/.test(isp))  return '涓浗绉诲姩';
+    if (/Telecom|鐢典俊/.test(isp)) return '涓浗鐢典俊';
+    if (/Unicom|鑱旈€?.test(isp))  return '涓浗鑱旈€?;
+    if (/Broadband/.test(isp))    return '瀹藉甫';
     return isp.length > 12 ? isp.slice(0,12) : isp;
   }
 
@@ -471,26 +464,24 @@
     .then(function(r){ return r.json(); })
     .then(function(d) {
       if (d.status === 'success') {
-        UserInfo.province = d.regionName ? d.regionName.replace('省','').replace('市','').replace('自治区','').replace('特别行政区','') : '';
-        UserInfo.city     = d.city ? d.city.replace('市','') : '';
+        UserInfo.province = d.regionName ? d.regionName.replace('鐪?,'').replace('甯?,'').replace('鑷不鍖?,'').replace('鐗瑰埆琛屾斂鍖?,'') : '';
+        UserInfo.city     = d.city ? d.city.replace('甯?,'') : '';
         UserInfo.isp      = normalizeISP(d.isp);
         UserInfo.ip       = d.query || '';
-        var loc  = [UserInfo.province, UserInfo.city].filter(Boolean).join(' · ');
+        var loc  = [UserInfo.province, UserInfo.city].filter(Boolean).join(' 路 ');
         var net2 = [UserInfo.isp, UserInfo.network].filter(Boolean).join(' ');
-        addRealTick('<span class="tn">'+UserInfo.device+'</span> · <span class="tl2">'+(loc||'未知地区')+'</span>'+(net2?' · '+net2:'')+' 刚刚来了', true);
+        addRealTick('<span class="tn">'+UserInfo.device+'</span> 路 <span class="tl2">'+(loc||'鏈煡鍦板尯')+'</span>'+(net2?' 路 '+net2:'')+' 鍒氬垰鏉ヤ簡', true);
       }
     }).catch(function(){});
 
   function myDesc() {
     var loc = [UserInfo.province, UserInfo.city].filter(Boolean).join(' ');
     var net = [UserInfo.isp, UserInfo.network].filter(Boolean).join('/');
-    return [UserInfo.device, UserInfo.browser, loc, net].filter(Boolean).join(' · ');
+    return [UserInfo.device, UserInfo.browser, loc, net].filter(Boolean).join(' 路 ');
   }
 
-  // ═══════════════════════════════════════
-  // 1. SLOT MACHINE COUNTER
-  // ═══════════════════════════════════════
-  (function() {
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 1. SLOT MACHINE COUNTER
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  (function() {
     var LAUNCH = new Date('2026-01-10T08:00:00+08:00');
     var BASE = 2631, DAILY = 13, HOURLY = 0.52, MIN_INC = 0.008;
     var DIGIT_H = 38, CYCLES = 5;
@@ -552,10 +543,8 @@
     run(getCount());
   })();
 
-  // ═══════════════════════════════════════
-  // 2. CALCULATOR LOGIC
-  // ═══════════════════════════════════════
-  var cur='0', prev='', op=null, waitOp=false, justCalc=false, litBtn=null;
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 2. CALCULATOR LOGIC
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var cur='0', prev='', op=null, waitOp=false, justCalc=false, litBtn=null;
   var numEl = document.getElementById('main-num');
   var exprEl = document.getElementById('expr');
 
@@ -564,19 +553,13 @@
     if (s.length > 12) { var n=parseFloat(s); if(!isNaN(n)){s=n.toPrecision(8).replace(/\.?0+$/,''); if(s.length>12)s=n.toExponential(4);} }
     numEl.textContent = s; numEl.style.color = '';
   }
-  function flipResult() {
-    numEl.classList.add('flipped');
-  }
-  function unflipResult() {
-    numEl.classList.remove('flipped');
-    numEl.style.filter = ''; numEl.style.color = ''; numEl.style.textShadow = ''; numEl.style.transition = '';
-    setDisplay(cur);
-  }
+  function flipResult()   { setTimeout(function(){ numEl.classList.add('flipped'); }, 300); }
+  function unflipResult() { numEl.classList.remove('flipped'); }
   function clearLit() { if (litBtn){litBtn.classList.remove('lit'); litBtn=null;} }
   function setLit(b)  { clearLit(); if(b){b.classList.add('lit'); litBtn=b;} }
   function calc(a,b,o) {
-    if(o==='+') return a+b; if(o==='−') return a-b; if(o==='×') return a*b;
-    if(o==='÷') return b!==0?a/b:'Error'; return b;
+    if(o==='+') return a+b; if(o==='鈭?) return a-b; if(o==='脳') return a*b;
+    if(o==='梅') return b!==0?a/b:'Error'; return b;
   }
   function onDigit(d) {
     if(justCalc){cur=d;exprEl.textContent='';justCalc=false;clearLit();unflipResult();}
@@ -603,9 +586,9 @@
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
     setDisplay(cur);
-    flipResult();       // flip 180°
+    flipResult();
     showPayment(fullExpr);
-    addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> 鍒氬垰鏌ヨ浜?<span class="te">'+fullExpr+'</span>', true);
   }
   function onClear() {
     cur='0';prev='';op=null;waitOp=false;justCalc=false;
@@ -632,9 +615,9 @@
     if      (e.key>='0'&&e.key<='9')          onDigit(e.key);
     else if (e.key==='.')                       onDot();
     else if (e.key==='+')                       onOp('+',null);
-    else if (e.key==='-')                       onOp('−',null);
-    else if (e.key==='*')                       onOp('×',null);
-    else if (e.key==='/'){e.preventDefault();   onOp('÷',null);}
+    else if (e.key==='-')                       onOp('鈭?,null);
+    else if (e.key==='*')                       onOp('脳',null);
+    else if (e.key==='/'){e.preventDefault();   onOp('梅',null);}
     else if (e.key==='Enter'||e.key==='=')      onEq();
     else if (e.key==='Backspace')              {cur=cur.length>1?cur.slice(0,-1):'0';setDisplay(cur);}
     else if (e.key==='Escape')                  onClear();
@@ -646,22 +629,20 @@
     btn.appendChild(r); r.addEventListener('animationend',function(){r.remove();});
   }
 
-  // ═══════════════════════════════════════
-  // 3. PAYMENT OVERLAY + FUNNY MESSAGES
-  // ═══════════════════════════════════════
-  var FUNNY = [
-    {icon:'🎰', title:'核验通过！结果是——', desc:'对不起，系统在就快完成的时候小逃了。它也浪费了您的时间'},
-    {icon:'🧠', title:'您的付款记录已找到', desc:'记录显示：您盯着¥1.99看了3.7秒，最终选择用【暂不查看】保全身而退'},
-    {icon:'🎨', title:'结果已就位，正在载入…', desc:'载入进度：0% —— 局域网已断开。局域网：我没断啊，是您的心断了'},
-    {icon:'📊', title:'深度分析您的付款行为完毕', desc:'结论：您的付款成功率和中彩票概率高度相关，下次不如试试'},
-    {icon:'🎪', title:'核验系统崩溃了', desc:'就在处理您付款记录的那一刻，纯属巧合，让专业的来'},
-    {icon:'🔮', title:'结果就在您心里', desc:'¥1.99也在您口袋里，两者都待在原地，相安无事，缘分到了'},
-    {icon:'🏆', title:'恭喜获得「年度最诚信用户」提名', desc:'投票通道已关闭，但您参与了，这很重要。系统不会忽视这一点'},
-    {icon:'🚚', title:'结果正在快递途中', desc:'下单付款时间：就尧了，已载到附近驿站，驿站在太平洋中心，预计3-5个工作日'},
-    {icon:'🤝', title:'您和¥1.99的缘分', desc:'止步于扫码界面，两者都认为对方要让步，局面僵了'},
-    {icon:'🌚', title:'结果已安全加密保存', desc:'解密密钚：永不公开——主要是我们也忘了密钚在哪，大家一起庅了吧'},
-    {icon:'👁️', title:'笱羊毛官方认证', desc:'此证书届时未执行付款操作，系统已备案，等您下次再来'},
-    {icon:'🧨', title:'经过精密运算', desc:'您的付款记录存在哲学上的不确定性，系统选择尊重，不作判断'},
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 3. PAYMENT OVERLAY + FUNNY MESSAGES
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var FUNNY = [
+    {icon:'馃帀', title:'鏍搁獙瀹屾垚锛?, desc:'楼1.99 宸插湪璺笂浜嗭紝灏辨槸鏂瑰悜鏆傛椂涓嶅お瀵癸紝绋嶇瓑'},
+    {icon:'馃敭', title:'绛旀宸插啓鍏ュ懡杩愪箣涔?, desc:'涓嬭緢瀛愯浆涓栨椂绯荤粺浼氳嚜鍔ㄦ帹閫佺粰鎮紝璇疯€愬績绛夊緟'},
+    {icon:'馃摝', title:'璁＄畻缁撴灉蹇€掗€斾腑', desc:'棰勮 3-5 涓伐浣滄棩閫佽揪锛岃鍦ㄥ绛夊€欑鏀?},
+    {icon:'馃専', title:'鎰熻阿鎮ㄧ殑淇′换涓庤€愬績', desc:'鎴戜滑鎶婅繖浠芥劅鍔ㄥ瓨鍏ヤ簡鏁版嵁搴擄紙浣嗙粨鏋滀笉浼氾級'},
+    {icon:'鈽?, title:'缁撴灉姝ｅ湪绮惧績鍑嗗涓?, desc:'灏卞儚娉′竴澹跺ソ鑼讹紝鎱㈡參鏉ワ紝鎬ヤ笉寰楃殑'},
+    {icon:'馃弲', title:'璇氫俊鐢ㄦ埛璁よ瘉閫氳繃', desc:'绯荤粺鐩镐俊鎮ㄧ湡鐨勪粯浜嗭紝鍙槸閽辨殏鏃惰糠璺簡'},
+    {icon:'馃寛', title:'浠婃棩鍕囨皵鎸戞垬瀹屾垚锛?, desc:'鎮ㄥ凡瓒呰秺 99% 鐨勮绠楀櫒鐢ㄦ埛锛屾槑澶╃户缁姞娌?},
+    {icon:'馃幁', title:'鏍搁獙閫氳繃浜嗭紒', desc:'缁撴灉鍢涒€︹€︾郴缁熻繖杈逛篃涓嶆槸寰堟竻妤氾紝澶у涓€璧风瓑'},
+    {icon:'馃拰', title:'缁撴灉宸插畨鍏ㄥ姞瀵嗕繚瀛?, desc:'瀵嗛挜鐢变粯娆捐褰曡В閿侊紝鑰屼粯娆捐褰曟樉绀衡€︹€﹀棷'},
+    {icon:'馃帾', title:'浠婃棩鏈€鍕囨寫鎴樿€?, desc:'鎮ㄧ殑鍕囨皵宸茬粡璁╂暣涓湇鍔″櫒閮芥繁鍙楁劅鍔?},
+    {icon:'馃', title:'鑱槑浜哄嚭娌?, desc:'楼1.99 娌¤姳鍑哄幓锛岃剳瀛愬姩浜嗗姩锛屼篃鎸哄ソ鐨?},
+    {icon:'馃', title:'钖呯緤姣涙垚灏辫揪鎴?, desc:'绯荤粺宸插妗堬紝涓嬫瑙佸埌鎮ㄤ細鏍煎浜插垏鍦版墦鎷涘懠'},
   ];
 
   var overlay      = document.getElementById('overlay');
@@ -678,7 +659,7 @@
   }
   function showPayment(expr) {
     lastExpr = expr;
-    document.getElementById('pay-expr').textContent = '🔐 ' + expr + ' = ***';
+    document.getElementById('pay-expr').textContent = '馃攼 ' + expr + ' = 鈻堚枅鈻堚枅';
     resetPayCard();
     overlay.classList.add('show');
     if (!qrGenerated) {
@@ -693,13 +674,15 @@
   }
   document.getElementById('pay-cancel').addEventListener('click', function() {
     overlay.classList.remove('show');
-    addRealTick('<span class="tn">'+UserInfo.device+'</span> 查询 <span class="te">'+lastExpr+'</span>，看到¥1.99后，默默关掉了弹窗', true);
+    numEl.textContent='锛燂紵锛?; numEl.style.color='#ff453a';
+    setTimeout(function(){ setDisplay(cur); }, 1600);
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> 鏌ヨ <span class="te">'+lastExpr+'</span>锛岀湅鍒奥?.99鍚庯紝榛橀粯鍏虫帀浜嗗脊绐?, true);
   });
   document.getElementById('pay-confirm').addEventListener('click', function() {
     payQRSection.style.display='none';
     verifySpinner.classList.add('show');
     document.getElementById('pay-confirm').style.display='none';
-    var delay = 600 + Math.random()*600;
+    var delay = 1800 + Math.random()*1400;
     setTimeout(function() {
       verifySpinner.classList.remove('show');
       var msg = FUNNY[Math.floor(Math.random()*FUNNY.length)];
@@ -707,28 +690,26 @@
       document.getElementById('funny-title').textContent = msg.title;
       document.getElementById('funny-desc').textContent  = msg.desc;
       funnyMsg.classList.add('show');
-      addRealTick('<span class="tn">'+UserInfo.device+'</span> 对 <span class="te">'+lastExpr+'</span> 点击「已完成付款」，系统表示存疑 🤨', true);
+      addRealTick('<span class="tn">'+UserInfo.device+'</span> 瀵?<span class="te">'+lastExpr+'</span> 鐐瑰嚮銆屽凡瀹屾垚浠樻銆嶏紝绯荤粺琛ㄧず瀛樼枒 馃え', true);
     }, delay);
   });
   overlay.addEventListener('click', function(e){ if(e.target===overlay) document.getElementById('pay-cancel').click(); });
 
-  // ═══════════════════════════════════════
-  // 4. COMMENT SYSTEM (localStorage)
-  // ═══════════════════════════════════════
-  var COM_AVATARS = ['🎭','🐼','🦊','🐸','🦉','🎪','🐯','🦋','🎨','🌊','🎸','🚀','🌈','🍉','🦄'];
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 4. COMMENT SYSTEM (localStorage)
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var COM_AVATARS = ['馃幁','馃惣','馃','馃惛','馃','馃帾','馃惎','馃','馃帹','馃寠','馃幐','馃殌','馃寛','馃崏','馃'];
   var SEED = [
-    {id:'s1',text:'算了1+1，支付弹窗秒弹，这效率比我老板还高',author:'🎭',name:'张*',province:'广东',device:'iPhone 15 Pro',time:Date.now()-7200000,likes:31,replies:[
-      {id:'s1r1',text:'投诉部门正在打盹，请稍后再试',author:'🎪',name:'客服机器人',province:'',device:'服务器',time:Date.now()-6800000,likes:58},
-      {id:'s1r2',text:'哈哈哈哈哈哈',author:'🐸',name:'李*',province:'上海',device:'小米14',time:Date.now()-3600000,likes:12}
+    {id:'s1',text:'绠椾簡1+1锛屾敮浠樺脊绐楃寮癸紝杩欐晥鐜囨瘮鎴戣€佹澘杩橀珮',author:'馃幁',name:'寮?',province:'骞夸笢',device:'iPhone 15 Pro',time:Date.now()-7200000,likes:31,replies:[
+      {id:'s1r1',text:'鎶曡瘔閮ㄩ棬姝ｅ湪鎵撶浌锛岃绋嶅悗鍐嶈瘯',author:'馃帾',name:'瀹㈡湇鏈哄櫒浜?,province:'',device:'鏈嶅姟鍣?,time:Date.now()-6800000,likes:58},
+      {id:'s1r2',text:'鍝堝搱鍝堝搱鍝堝搱',author:'馃惛',name:'鏉?',province:'涓婃捣',device:'灏忕背14',time:Date.now()-3600000,likes:12}
     ]},
-    {id:'s2',text:'我已经连续三天来这里计算，坚决不付款，这是原则问题',author:'🦊',name:'王**',province:'北京',device:'MacBook Pro',time:Date.now()-5000000,likes:77,replies:[
-      {id:'s2r1',text:'你是本月最坚强的用户，系统已为你立传',author:'🦉',name:'匿名',province:'浙江',device:'iPhone 14',time:Date.now()-4500000,likes:44}
+    {id:'s2',text:'鎴戝凡缁忚繛缁笁澶╂潵杩欓噷璁＄畻锛屽潥鍐充笉浠樻锛岃繖鏄師鍒欓棶棰?,author:'馃',name:'鐜?*',province:'鍖椾含',device:'MacBook Pro',time:Date.now()-5000000,likes:77,replies:[
+      {id:'s2r1',text:'浣犳槸鏈湀鏈€鍧氬己鐨勭敤鎴凤紝绯荤粺宸蹭负浣犵珛浼?,author:'馃',name:'鍖垮悕',province:'娴欐睙',device:'iPhone 14',time:Date.now()-4500000,likes:44}
     ]},
-    {id:'s3',text:'发给男朋友看，他以为是真的，付款了，哈哈哈哈',author:'🌈',name:'陈*',province:'四川',device:'iPhone 13',time:Date.now()-2400000,likes:104,replies:[]},
-    {id:'s4',text:'我要在这里表白：如果你在用计算器算什么，结果是你爱我就好了',author:'🌊',name:'匿名',province:'湖南',device:'华为Mate60',time:Date.now()-1200000,likes:88,replies:[
-      {id:'s4r1',text:'这是我见过最浪漫的地方，没有之一',author:'🎨',name:'刘*',province:'江苏',device:'vivo X100',time:Date.now()-900000,likes:62}
+    {id:'s3',text:'鍙戠粰鐢锋湅鍙嬬湅锛屼粬浠ヤ负鏄湡鐨勶紝浠樻浜嗭紝鍝堝搱鍝堝搱',author:'馃寛',name:'闄?',province:'鍥涘窛',device:'iPhone 13',time:Date.now()-2400000,likes:104,replies:[]},
+    {id:'s4',text:'鎴戣鍦ㄨ繖閲岃〃鐧斤細濡傛灉浣犲湪鐢ㄨ绠楀櫒绠椾粈涔堬紝缁撴灉鏄綘鐖辨垜灏卞ソ浜?,author:'馃寠',name:'鍖垮悕',province:'婀栧崡',device:'鍗庝负Mate60',time:Date.now()-1200000,likes:88,replies:[
+      {id:'s4r1',text:'杩欐槸鎴戣杩囨渶娴极鐨勫湴鏂癸紝娌℃湁涔嬩竴',author:'馃帹',name:'鍒?',province:'姹熻嫃',device:'vivo X100',time:Date.now()-900000,likes:62}
     ]},
-    {id:'s5',text:'¥1.99我觉得挺值的，算一个1024÷0，系统告诉我Error，很准确',author:'🚀',name:'匿名',province:'山东',device:'Windows电脑',time:Date.now()-600000,likes:39,replies:[]},
+    {id:'s5',text:'楼1.99鎴戣寰楁尯鍊肩殑锛岀畻涓€涓?024梅0锛岀郴缁熷憡璇夋垜Error锛屽緢鍑嗙‘',author:'馃殌',name:'鍖垮悕',province:'灞变笢',device:'Windows鐢佃剳',time:Date.now()-600000,likes:39,replies:[]},
   ];
 
   function loadComments() {
@@ -744,7 +725,7 @@
   }
   function timeAgo(ts) {
     var d=Date.now()-ts, m=Math.floor(d/60000), h=Math.floor(m/60), day=Math.floor(h/24);
-    if(m<1)return '刚刚'; if(m<60)return m+'分钟前'; if(h<24)return h+'小时前'; return day+'天前';
+    if(m<1)return '鍒氬垰'; if(m<60)return m+'鍒嗛挓鍓?; if(h<24)return h+'灏忔椂鍓?; return day+'澶╁墠';
   }
 
   function renderCommentCard(c, isReply) {
@@ -753,14 +734,14 @@
     var repliesHtml = (!isReply && c.replies && c.replies.length)
       ? '<div class="c-replies">' + c.replies.map(function(r){return renderCommentCard(r,true);}).join('') + '</div>' : '';
     var replyBtn = !isReply
-      ? '<button class="c-reply-btn" onclick="toggleReplyInput(\''+c.id+'\')">💬 回复</button>' : '';
+      ? '<button class="c-reply-btn" onclick="toggleReplyInput(\''+c.id+'\')">馃挰 鍥炲</button>' : '';
     var replyInput = !isReply
       ? '<div class="reply-input-wrap" id="ri-'+c.id+'">'
-        + '<textarea class="reply-input" id="rit-'+c.id+'" placeholder="回复…" rows="1"></textarea>'
-        + '<button class="reply-send" onclick="submitReply(\''+c.id+'\')">发送</button>'
+        + '<textarea class="reply-input" id="rit-'+c.id+'" placeholder="鍥炲鈥? rows="1"></textarea>'
+        + '<button class="reply-send" onclick="submitReply(\''+c.id+'\')">鍙戦€?/button>'
         + '</div>' : '';
-    var displayName = c.name || c.device || '匿名';
-    var pvHtml = c.province ? '<span class="loc-pv">'+c.province+'</span> · ' : '';
+    var displayName = c.name || c.device || '鍖垮悕';
+    var pvHtml = c.province ? '<span class="loc-pv">'+c.province+'</span> 路 ' : '';
     var locLine = (c.province || c.device)
       ? '<div class="c-location">'+pvHtml+(c.device||'')+'</div>' : '';
     return '<div class="'+cls+'" id="c-'+c.id+'">'
@@ -773,7 +754,7 @@
       + '</div>'
       + '<div class="c-text">'+c.text+'</div>'
       + '<div class="c-actions">'
-      + '<button class="c-like" id="like-'+c.id+'" onclick="toggleLike(\''+c.id+'\')">❤ '+c.likes+'</button>'
+      + '<button class="c-like" id="like-'+c.id+'" onclick="toggleLike(\''+c.id+'\')">鉂?'+c.likes+'</button>'
       + replyBtn
       + '</div>'
       + repliesHtml
@@ -786,7 +767,7 @@
     document.getElementById('comment-list').innerHTML = data.map(function(c){return renderCommentCard(c);}).join('');
     var total = data.reduce(function(s,c){return s+1+(c.replies||[]).length;}, 0);
     document.getElementById('comment-count').textContent = total;
-    document.getElementById('sheet-count').textContent = total + ' 条神评';
+    document.getElementById('sheet-count').textContent = total + ' 鏉＄璇?;
   }
   function toggleReplyInput(id) {
     var wrap=document.getElementById('ri-'+id);
@@ -806,7 +787,7 @@
     if(!text)return;
     var data=loadComments();
     data.unshift({id:'u'+Date.now(), text:text, author:getMyAvatar(),
-      name: localStorage.getItem('my_nickname')||'匿名',
+      name: localStorage.getItem('my_nickname')||'鍖垮悕',
       province: UserInfo.province||'',
       device: UserInfo.device,
       time:Date.now(), likes:0, replies:[]});
@@ -819,7 +800,7 @@
     var data=loadComments(), parent=data.find(function(c){return c.id===parentId;});
     if(!parent)return;
     parent.replies.push({id:'r'+Date.now(), text:text, author:getMyAvatar(),
-      name: localStorage.getItem('my_nickname')||'匿名',
+      name: localStorage.getItem('my_nickname')||'鍖垮悕',
       province: UserInfo.province||'',
       device: UserInfo.device,
       time:Date.now(), likes:0});
@@ -836,18 +817,16 @@
     document.getElementById('comment-count').textContent=t;
   }, 100);
 
-  // ═══════════════════════════════════════
-  // 5. TICKER
-  // ═══════════════════════════════════════
-  var FN=['张','李','王','赵','陈','刘','杨','黄','周','吴','郑','孙','徐','朱','马','胡','林','郭','何','高','梁','钱','冯','韩','许','邓','萧'];
-  var LN=['伟','芳','娜','秀英','敏','静','丽','强','磊','洋','艳','勇','军','杰','娟','涛','明','超','霞','平','帅','萌'];
-  var OPS=['+','−','×','÷'];
-  var PROVINCES=['广东','北京','上海','浙江','江苏','四川','湖南','湖北','陕西','山东','河南','福建','重庆','云南','安徽','天津','辽宁','黑龙江','吉林','内蒙古','新疆'];
-  var ISPS=['中国移动','中国电信','中国联通','中国广电'];
-  var DEVICES=['iPhone 15 Pro','iPhone 14','iPhone 13','小米14','小米13','华为Mate60','华为P60','OPPO Find X7','vivo X100','三星S24','Redmi K70'];
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 5. TICKER
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var FN=['寮?,'鏉?,'鐜?,'璧?,'闄?,'鍒?,'鏉?,'榛?,'鍛?,'鍚?,'閮?,'瀛?,'寰?,'鏈?,'椹?,'鑳?,'鏋?,'閮?,'浣?,'楂?,'姊?,'閽?,'鍐?,'闊?,'璁?,'閭?,'钀?];
+  var LN=['浼?,'鑺?,'濞?,'绉€鑻?,'鏁?,'闈?,'涓?,'寮?,'纾?,'娲?,'鑹?,'鍕?,'鍐?,'鏉?,'濞?,'娑?,'鏄?,'瓒?,'闇?,'骞?,'甯?,'钀?];
+  var OPS=['+','鈭?,'脳','梅'];
+  var PROVINCES=['骞夸笢','鍖椾含','涓婃捣','娴欐睙','姹熻嫃','鍥涘窛','婀栧崡','婀栧寳','闄曡タ','灞变笢','娌冲崡','绂忓缓','閲嶅簡','浜戝崡','瀹夊窘','澶╂触','杈藉畞','榛戦緳姹?,'鍚夋灄','鍐呰挋鍙?,'鏂扮枂'];
+  var ISPS=['涓浗绉诲姩','涓浗鐢典俊','涓浗鑱旈€?,'涓浗骞跨數'];
+  var DEVICES=['iPhone 15 Pro','iPhone 14','iPhone 13','灏忕背14','灏忕背13','鍗庝负Mate60','鍗庝负P60','OPPO Find X7','vivo X100','涓夋槦S24','Redmi K70'];
 
   function rname()     { var f=FN[~~(Math.random()*FN.length)],l=LN[~~(Math.random()*LN.length)],s=f+l; return s.length>=3?s[0]+'*'.repeat(s.length-2)+s[s.length-1]:s[0]+'*'; }
-  function rtime()     { var m=~~(Math.random()*58)+1; return m<60?m+'分钟前':~~(m/60)+'小时前'; }
+  function rtime()     { var m=~~(Math.random()*58)+1; return m<60?m+'鍒嗛挓鍓?:~~(m/60)+'灏忔椂鍓?; }
   function rexpr()     { return (~~(Math.random()*9999)+1)+' '+OPS[~~(Math.random()*4)]+' '+(~~(Math.random()*9999)+1); }
   function rprovince() { return PROVINCES[~~(Math.random()*PROVINCES.length)]; }
   function risp()      { return ISPS[~~(Math.random()*ISPS.length)]; }
@@ -855,14 +834,14 @@
   function rnet()      { return ['4G','5G','WiFi'][~~(Math.random()*3)]; }
 
   var FAKE_T = [
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'查 <span class="te">'+e+'</span>，默默关掉了'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 声称已付款 🤨 系统存疑'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 查 <span class="te">'+e+'</span>，这次真的会付（上次也这么说）'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'在弹窗停留0.8秒，破本周最短纪录'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 把¥1.99投进了存钱罐，说下次再用'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 查 <span class="te">'+e+'</span>，结果见了也没带走'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' 试图用道德说服系统免费给答案，失败'; },
-    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> · <span class="tl2">'+pv+'</span> · '+dv+' '+t+'查 <span class="te">'+e+'</span>，表示回去凑钱'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>路<span class="tl2">'+pv+'</span>路'+net+' '+t+'鏌?<span class="te">'+e+'</span>'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> <span class="tn">'+n+'</span> 绠楀畬鍏虫帀浜嗗脊绐?; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>路'+isp+' 绠?<span class="te">'+e+'</span> 鎷掔粷浠樻'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span>路<span class="tl2">'+pv+'</span> 璇曞浘鍏嶈垂鐪嬬粨鏋滐紝澶辫触'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span> '+dv+' 澹扮О宸蹭粯娆?馃え'; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tn">'+n+'</span> 鏌?<span class="te">'+e+'</span>锛屽脊绐?.3绉掑悗鍏抽棴'; },
+    function(n,e,t,pv,isp,dv,net){ return dv+'路<span class="tl2">'+pv+'</span> 绠椾簡缁撴灉涓嶇粰鐪?; },
+    function(n,e,t,pv,isp,dv,net){ return '<span class="tl2">'+pv+'</span>路'+isp+' '+t+' 鏌?<span class="te">'+e+'</span>'; },
   ];
 
   var tickerData = [];
@@ -892,13 +871,11 @@
   }, 9000);
 
   setTimeout(function(){
-    addRealTick('<span class="tn">'+UserInfo.device+'</span> · '+UserInfo.browser+(UserInfo.network?' · '+UserInfo.network:'')+' 刚刚打开了计算云™', true);
+    addRealTick('<span class="tn">'+UserInfo.device+'</span> 路 '+UserInfo.browser+(UserInfo.network?' 路 '+UserInfo.network:'')+' 鍒氬垰鎵撳紑浜嗚绠椾簯鈩?, true);
   }, 200);
 
-  // ═══════════════════════════════════════
-  // 6. NICKNAME SYSTEM
-  // ═══════════════════════════════════════
-  var ALL_AVATARS = ['🎭','🐼','🦊','🐸','🦉','🎪','🐯','🦋','🎨','🌊','🎸','🚀','🌈','🍉','🦄','🎃','🌸','🦈','🐉','🍀'];
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  // 6. NICKNAME SYSTEM
+  // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?  var ALL_AVATARS = ['馃幁','馃惣','馃','馃惛','馃','馃帾','馃惎','馃','馃帹','馃寠','馃幐','馃殌','馃寛','馃崏','馃','馃巸','馃尭','馃','馃悏','馃崁'];
 
   function getNickname() { return localStorage.getItem('my_nickname')||''; }
   function getAvatar()   { return localStorage.getItem('my_avatar')||ALL_AVATARS[0]; }
@@ -906,7 +883,7 @@
   function updateNicknameDisplay() {
     var nm=getNickname(), av=getAvatar();
     document.getElementById('my-av-disp').textContent = av;
-    document.getElementById('my-nm-disp').textContent = nm||'匿名';
+    document.getElementById('my-nm-disp').textContent = nm||'鍖垮悕';
   }
   function openNickname() {
     var ol=document.getElementById('nn-overlay');
