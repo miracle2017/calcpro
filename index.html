@@ -603,7 +603,6 @@
     exprEl.textContent=fullExpr+' =';
     cur=String(parseFloat(r.toFixed(10))); op=null; waitOp=false; justCalc=true; clearLit();
     setDisplay(cur);
-    flipResult();       // flip 180°
     showPayment(fullExpr);
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 刚刚查询了 <span class="te">'+fullExpr+'</span>', true);
   }
@@ -692,6 +691,12 @@
     }
   }
   document.getElementById('pay-cancel').addEventListener('click', function() {
+    // Flip instantly while modal still covers (user can't see)
+    numEl.style.transition = 'none';
+    numEl.classList.add('flipped');
+    void numEl.offsetWidth;
+    numEl.style.transition = '';
+    // Now close modal — reveals already-flipped result
     overlay.classList.remove('show');
     addRealTick('<span class="tn">'+UserInfo.device+'</span> 查询 <span class="te">'+lastExpr+'</span>，看到¥1.99后，默默关掉了弹窗', true);
   });
